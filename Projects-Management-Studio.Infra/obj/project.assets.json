@@ -1,11 +1,30 @@
 {
   "version": 3,
   "targets": {
-    "net10.0": {}
+    "net10.0": {
+      "Projects-Management-Studio.Domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "compile": {
+          "bin/placeholder/Projects-Management-Studio.Domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Projects-Management-Studio.Domain.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "Projects-Management-Studio.Domain/1.0.0": {
+      "type": "project",
+      "path": "../Projects-Management-Studio.Domain/Projects-Management-Studio.Domain.csproj",
+      "msbuildProject": "../Projects-Management-Studio.Domain/Projects-Management-Studio.Domain.csproj"
+    }
+  },
   "projectFileDependencyGroups": {
-    "net10.0": []
+    "net10.0": [
+      "Projects-Management-Studio.Domain >= 1.0.0"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\DELL\\.nuget\\packages\\": {},
@@ -39,7 +58,11 @@
       "frameworks": {
         "net10.0": {
           "targetAlias": "net10.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "D:\\Programming\\Projects\\Projects-Management-Studio\\Projects-Management-Studio.Domain\\Projects-Management-Studio.Domain.csproj": {
+              "projectPath": "D:\\Programming\\Projects\\Projects-Management-Studio\\Projects-Management-Studio.Domain\\Projects-Management-Studio.Domain.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

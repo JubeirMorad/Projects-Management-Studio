@@ -10,3 +10,7 @@ D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.In
 D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.Infra\obj\Debug\net10.0\Projects-Management-Studio.Infra.pdb
 D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.Infra\obj\Debug\net10.0\ref\Projects-Management-Studio.Infra.dll
 D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.Infra\obj\Debug\net10.0\Projects-Management-Studio.Infra.sourcelink.json
+D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.Infra\bin\Debug\net10.0\Projects-Management-Studio.Domain.dll
+D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.Infra\bin\Debug\net10.0\Projects-Management-Studio.Domain.pdb
+D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.Infra\obj\Debug\net10.0\Projects-Management-Studio.Infra.csproj.AssemblyReference.cache
+D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.Infra\obj\Debug\net10.0\Projects.6A091242.Up2Date

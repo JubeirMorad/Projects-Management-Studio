@@ -1,10 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 using Projects_Management_Studio.App.Services.Interfaces;
 
-namespace Projects_Management_Studio.App.Services.Implementation
+namespace Projects_Management_Studio.App.Services
 {
     public class AuthService : IAuthService
     {

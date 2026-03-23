@@ -36,6 +36,43 @@
             "related": ".pdb;.xml"
           }
         }
+      },
+      "Projects-Management-Studio.App/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "dependencies": {
+          "Projects-Management-Studio.Domain": "1.0.0",
+          "Projects-Management-Studio.Infra": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Projects-Management-Studio.App.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Projects-Management-Studio.App.dll": {}
+        }
+      },
+      "Projects-Management-Studio.Domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "compile": {
+          "bin/placeholder/Projects-Management-Studio.Domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Projects-Management-Studio.Domain.dll": {}
+        }
+      },
+      "Projects-Management-Studio.Infra/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "dependencies": {
+          "Projects-Management-Studio.Domain": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Projects-Management-Studio.Infra.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Projects-Management-Studio.Infra.dll": {}
+        }
       }
     }
   },
@@ -75,11 +112,27 @@
         "microsoft.openapi.2.0.0.nupkg.sha512",
         "microsoft.openapi.nuspec"
       ]
+    },
+    "Projects-Management-Studio.App/1.0.0": {
+      "type": "project",
+      "path": "../Projects-Management-Studio.App/Projects-Management-Studio.App.csproj",
+      "msbuildProject": "../Projects-Management-Studio.App/Projects-Management-Studio.App.csproj"
+    },
+    "Projects-Management-Studio.Domain/1.0.0": {
+      "type": "project",
+      "path": "../Projects-Management-Studio.Domain/Projects-Management-Studio.Domain.csproj",
+      "msbuildProject": "../Projects-Management-Studio.Domain/Projects-Management-Studio.Domain.csproj"
+    },
+    "Projects-Management-Studio.Infra/1.0.0": {
+      "type": "project",
+      "path": "../Projects-Management-Studio.Infra/Projects-Management-Studio.Infra.csproj",
+      "msbuildProject": "../Projects-Management-Studio.Infra/Projects-Management-Studio.Infra.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net10.0": [
-      "Microsoft.AspNetCore.OpenApi >= 10.0.1"
+      "Microsoft.AspNetCore.OpenApi >= 10.0.1",
+      "Projects-Management-Studio.App >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -114,7 +167,11 @@
       "frameworks": {
         "net10.0": {
           "targetAlias": "net10.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "D:\\Programming\\Projects\\Projects-Management-Studio\\Projects-Management-Studio.App\\Projects-Management-Studio.App.csproj": {
+              "projectPath": "D:\\Programming\\Projects\\Projects-Management-Studio\\Projects-Management-Studio.App\\Projects-Management-Studio.App.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
