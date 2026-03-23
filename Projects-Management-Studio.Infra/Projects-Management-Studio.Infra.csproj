@@ -2,6 +2,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Projects-Management-Studio.Domain\Projects-Management-Studio.Domain.csproj" />
+    <ProjectReference Include="..\Projects-Management-Studio.app\Projects-Management-Studio.app.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BCrypt" Version="1.0.0" />
+    <PackageReference Include="BCrypt.Net-Next" Version="4.1.0" />
   </ItemGroup>
 
   <PropertyGroup>

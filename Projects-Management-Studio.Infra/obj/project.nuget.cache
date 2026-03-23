@@ -1,8 +1,24 @@
 {
   "version": 2,
-  "dgSpecHash": "GhsnK9uk9MI=",
+  "dgSpecHash": "eCmN96TdTfE=",
   "success": true,
   "projectFilePath": "D:\\Programming\\Projects\\Projects-Management-Studio\\Projects-Management-Studio.Infra\\Projects-Management-Studio.Infra.csproj",
-  "expectedPackageFiles": [],
-  "logs": []
+  "expectedPackageFiles": [
+    "C:\\Users\\DELL\\.nuget\\packages\\bcrypt\\1.0.0\\bcrypt.1.0.0.nupkg.sha512",
+    "C:\\Users\\DELL\\.nuget\\packages\\bcrypt.net-next\\4.1.0\\bcrypt.net-next.4.1.0.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "message": "Package 'BCrypt 1.0.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net10.0'. This package may not be fully compatible with your project.",
+      "projectPath": "D:\\Programming\\Projects\\Projects-Management-Studio\\Projects-Management-Studio.Infra\\Projects-Management-Studio.Infra.csproj",
+      "warningLevel": 1,
+      "filePath": "D:\\Programming\\Projects\\Projects-Management-Studio\\Projects-Management-Studio.Infra\\Projects-Management-Studio.Infra.csproj",
+      "libraryId": "BCrypt",
+      "targetGraphs": [
+        "net10.0"
+      ]
+    }
+  ]
 }

@@ -2,7 +2,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Projects-Management-Studio.Domain\Projects-Management-Studio.Domain.csproj" />
-    <ProjectReference Include="..\Projects-Management-Studio.Infra\Projects-Management-Studio.Infra.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
