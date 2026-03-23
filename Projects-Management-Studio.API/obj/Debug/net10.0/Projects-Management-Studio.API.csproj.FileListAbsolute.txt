@@ -31,3 +31,4 @@ D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.AP
 D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.API\obj\Debug\net10.0\Projects-Management-Studio.API.pdb
 D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.API\obj\Debug\net10.0\Projects-Management-Studio.API.genruntimeconfig.cache
 D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.API\obj\Debug\net10.0\ref\Projects-Management-Studio.API.dll
+D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.API\obj\Debug\net10.0\Projects-Management-Studio.API.sourcelink.json
