@@ -3731,8 +3731,8 @@
       "BCrypt.Net-Next >= 4.1.0",
       "Microsoft.EntityFrameworkCore >= 10.0.5",
       "Microsoft.EntityFrameworkCore.Design >= 10.0.5",
+      "Microsoft.EntityFrameworkCore.SqlServer >= 10.0.5",
       "Microsoft.EntityFrameworkCore.Tools >= 10.0.5",
-      "Microsoft.EntityFrameworkCore.sqlserver >= 10.0.5",
       "Projects-Management-Studio.Domain >= 1.0.0",
       "Projects-Management-Studio.app >= 1.0.0"
     ]
@@ -3809,13 +3809,13 @@
             "target": "Package",
             "version": "[10.0.5, )"
           },
-          "Microsoft.EntityFrameworkCore.Tools": {
-            "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
-            "suppressParent": "All",
+          "Microsoft.EntityFrameworkCore.SqlServer": {
             "target": "Package",
             "version": "[10.0.5, )"
           },
-          "Microsoft.EntityFrameworkCore.sqlserver": {
+          "Microsoft.EntityFrameworkCore.Tools": {
+            "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+            "suppressParent": "All",
             "target": "Package",
             "version": "[10.0.5, )"
           }
