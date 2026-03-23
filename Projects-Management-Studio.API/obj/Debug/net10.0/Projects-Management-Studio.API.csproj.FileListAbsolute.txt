@@ -34,7 +34,5 @@ D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.AP
 D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.API\obj\Debug\net10.0\Projects-Management-Studio.API.sourcelink.json
 D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.API\bin\Debug\net10.0\Projects-Management-Studio.App.dll
 D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.API\bin\Debug\net10.0\Projects-Management-Studio.Domain.dll
-D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.API\bin\Debug\net10.0\Projects-Management-Studio.Infra.dll
 D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.API\bin\Debug\net10.0\Projects-Management-Studio.App.pdb
 D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.API\bin\Debug\net10.0\Projects-Management-Studio.Domain.pdb
-D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.API\bin\Debug\net10.0\Projects-Management-Studio.Infra.pdb

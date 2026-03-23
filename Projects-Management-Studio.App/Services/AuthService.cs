@@ -18,10 +18,11 @@ namespace Projects_Management_Studio.App.Services
         }
         
 
-        
+
         public async Task RegisterAsync(string userName, string email, string password)
         {
             var hashedPassword = _passwordHasher.Hash(password);
+            
             var user = new User()
             {
                 Username = userName,

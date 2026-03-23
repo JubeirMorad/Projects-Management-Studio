@@ -6,13 +6,12 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v10.0": {
-      "Projects-Management-Studio.App/1.0.0": {
+      "Projects-Management-Studio.app/1.0.0": {
         "dependencies": {
-          "Projects-Management-Studio.Domain": "1.0.0",
-          "Projects-Management-Studio.Infra": "1.0.0"
+          "Projects-Management-Studio.Domain": "1.0.0"
         },
         "runtime": {
-          "Projects-Management-Studio.App.dll": {}
+          "Projects-Management-Studio.app.dll": {}
         }
       },
       "Projects-Management-Studio.Domain/1.0.0": {
@@ -22,32 +21,16 @@
             "fileVersion": "1.0.0.0"
           }
         }
-      },
-      "Projects-Management-Studio.Infra/1.0.0": {
-        "dependencies": {
-          "Projects-Management-Studio.Domain": "1.0.0"
-        },
-        "runtime": {
-          "Projects-Management-Studio.Infra.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.0.0"
-          }
-        }
       }
     }
   },
   "libraries": {
-    "Projects-Management-Studio.App/1.0.0": {
+    "Projects-Management-Studio.app/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
     },
     "Projects-Management-Studio.Domain/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "Projects-Management-Studio.Infra/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
