@@ -1,0 +1,11 @@
+D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.Domain\bin\Debug\net10.0\Projects-Management-Studio.Domain.deps.json
+D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.Domain\bin\Debug\net10.0\Projects-Management-Studio.Domain.dll
+D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.Domain\bin\Debug\net10.0\Projects-Management-Studio.Domain.pdb
+D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.Domain\obj\Debug\net10.0\Projects-Management-Studio.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.Domain\obj\Debug\net10.0\Projects-Management-Studio.Domain.AssemblyInfoInputs.cache
+D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.Domain\obj\Debug\net10.0\Projects-Management-Studio.Domain.AssemblyInfo.cs
+D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.Domain\obj\Debug\net10.0\Projects-Management-Studio.Domain.csproj.CoreCompileInputs.cache
+D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.Domain\obj\Debug\net10.0\Projects-Management-Studio.Domain.dll
+D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.Domain\obj\Debug\net10.0\refint\Projects-Management-Studio.Domain.dll
+D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.Domain\obj\Debug\net10.0\Projects-Management-Studio.Domain.pdb
+D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.Domain\obj\Debug\net10.0\ref\Projects-Management-Studio.Domain.dll

@@ -1,0 +1,11 @@
+D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.Infra\bin\Debug\net10.0\Projects-Management-Studio.Infra.deps.json
+D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.Infra\bin\Debug\net10.0\Projects-Management-Studio.Infra.dll
+D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.Infra\bin\Debug\net10.0\Projects-Management-Studio.Infra.pdb
+D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.Infra\obj\Debug\net10.0\Projects-Management-Studio.Infra.GeneratedMSBuildEditorConfig.editorconfig
+D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.Infra\obj\Debug\net10.0\Projects-Management-Studio.Infra.AssemblyInfoInputs.cache
+D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.Infra\obj\Debug\net10.0\Projects-Management-Studio.Infra.AssemblyInfo.cs
+D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.Infra\obj\Debug\net10.0\Projects-Management-Studio.Infra.csproj.CoreCompileInputs.cache
+D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.Infra\obj\Debug\net10.0\Projects-Management-Studio.Infra.dll
+D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.Infra\obj\Debug\net10.0\refint\Projects-Management-Studio.Infra.dll
+D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.Infra\obj\Debug\net10.0\Projects-Management-Studio.Infra.pdb
+D:\Programming\Projects\Projects-Management-Studio\Projects-Management-Studio.Infra\obj\Debug\net10.0\ref\Projects-Management-Studio.Infra.dll
