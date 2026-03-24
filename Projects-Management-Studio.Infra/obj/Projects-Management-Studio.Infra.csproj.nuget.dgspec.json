@@ -4,14 +4,14 @@
     "D:\\Programming\\Projects\\Projects-Management-Studio\\Projects-Management-Studio.Infra\\Projects-Management-Studio.Infra.csproj": {}
   },
   "projects": {
-    "D:\\Programming\\Projects\\Projects-Management-Studio\\Projects-Management-Studio.app\\Projects-Management-Studio.app.csproj": {
+    "D:\\Programming\\Projects\\Projects-Management-Studio\\Projects-Management-Studio.App\\Projects-Management-Studio.App.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Programming\\Projects\\Projects-Management-Studio\\Projects-Management-Studio.app\\Projects-Management-Studio.app.csproj",
-        "projectName": "Projects-Management-Studio.app",
-        "projectPath": "D:\\Programming\\Projects\\Projects-Management-Studio\\Projects-Management-Studio.app\\Projects-Management-Studio.app.csproj",
+        "projectUniqueName": "D:\\Programming\\Projects\\Projects-Management-Studio\\Projects-Management-Studio.App\\Projects-Management-Studio.App.csproj",
+        "projectName": "Projects-Management-Studio.App",
+        "projectPath": "D:\\Programming\\Projects\\Projects-Management-Studio\\Projects-Management-Studio.App\\Projects-Management-Studio.App.csproj",
         "packagesPath": "C:\\Users\\DELL\\.nuget\\packages\\",
-        "outputPath": "D:\\Programming\\Projects\\Projects-Management-Studio\\Projects-Management-Studio.app\\obj\\",
+        "outputPath": "D:\\Programming\\Projects\\Projects-Management-Studio\\Projects-Management-Studio.App\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Program Files\\Visual Studio\\NuGetPackages"
@@ -717,8 +717,8 @@
           "net10.0": {
             "targetAlias": "net10.0",
             "projectReferences": {
-              "D:\\Programming\\Projects\\Projects-Management-Studio\\Projects-Management-Studio.app\\Projects-Management-Studio.app.csproj": {
-                "projectPath": "D:\\Programming\\Projects\\Projects-Management-Studio\\Projects-Management-Studio.app\\Projects-Management-Studio.app.csproj"
+              "D:\\Programming\\Projects\\Projects-Management-Studio\\Projects-Management-Studio.App\\Projects-Management-Studio.App.csproj": {
+                "projectPath": "D:\\Programming\\Projects\\Projects-Management-Studio\\Projects-Management-Studio.App\\Projects-Management-Studio.App.csproj"
               },
               "D:\\Programming\\Projects\\Projects-Management-Studio\\Projects-Management-Studio.Domain\\Projects-Management-Studio.Domain.csproj": {
                 "projectPath": "D:\\Programming\\Projects\\Projects-Management-Studio\\Projects-Management-Studio.Domain\\Projects-Management-Studio.Domain.csproj"

@@ -12,8 +12,8 @@
           "Microsoft.EntityFrameworkCore": "10.0.5",
           "Microsoft.EntityFrameworkCore.Design": "10.0.5",
           "Microsoft.EntityFrameworkCore.SqlServer": "10.0.5",
-          "Projects-Management-Studio.Domain": "1.0.0",
-          "Projects-Management-Studio.app": "1.0.0"
+          "Projects-Management-Studio.App": "1.0.0",
+          "Projects-Management-Studio.Domain": "1.0.0"
         },
         "runtime": {
           "Projects-Management-Studio.Infra.dll": {}
@@ -916,14 +916,13 @@
           }
         }
       },
-      "Projects-Management-Studio.app/1.0.0": {
+      "Projects-Management-Studio.App/1.0.0": {
         "dependencies": {
           "Projects-Management-Studio.Domain": "1.0.0"
         },
         "runtime": {
           "Projects-Management-Studio.app.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.0.0"
+            "fileVersion": "0.0.0.0"
           }
         }
       },
@@ -1328,7 +1327,7 @@
       "path": "system.security.cryptography.protecteddata/9.0.4",
       "hashPath": "system.security.cryptography.protecteddata.9.0.4.nupkg.sha512"
     },
-    "Projects-Management-Studio.app/1.0.0": {
+    "Projects-Management-Studio.App/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

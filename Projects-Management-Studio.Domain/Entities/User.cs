@@ -1,9 +1,12 @@
 
 
+using System.ComponentModel.DataAnnotations;
+
 namespace Projects_Management_Studio.Domain.Entities
 {
     public class User
     {
+        [Key]
         public Guid Id { get; set; }
 
         public string Username { get; set; } = null!;
