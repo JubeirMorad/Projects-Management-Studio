@@ -26,5 +26,10 @@ namespace Projects_Management_Studio.Infra.Repostories
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
+
+        public Task UpdateUserAsync(User user)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
