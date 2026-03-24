@@ -28,6 +28,13 @@ namespace Projects_Management_Studio.API.Controllers
             return Ok();
         }
 
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(LoginRequest request)
+        {
+            await authService.LoginAsync(request.Email, request.Password);
+
+            return Ok();
+        }
 
     }
 }

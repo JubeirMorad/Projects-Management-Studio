@@ -39,6 +39,8 @@ namespace Projects_Management_Studio.App.Services
             string refreshToken = _jwtProvider.GenerateRefreshToken();
 
             user.RefreshToken = refreshToken;
+            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(2);
+            
             await _userRepo.UpdateUserAsync(user);
 
             return (accessToken, refreshToken);

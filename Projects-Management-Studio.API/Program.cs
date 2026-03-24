@@ -32,6 +32,8 @@ builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 // add AuthenticationService
 builder.Services.AddScoped<IAuthService, AuthService>();
 
+builder.Services.AddScoped<IJwtProvider, JwtProvider>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
