@@ -19,8 +19,6 @@ namespace Projects_Management_Studio.App.Services
             _passwordHasher = passwordHasher;
             _jwtProvider = jwtProvider;
         }
-
-
         //
         //
         //
@@ -28,11 +26,11 @@ namespace Projects_Management_Studio.App.Services
         {
 
             User user = await _userRepo.GetUserByEmailAsync(email)
-                        ?? throw new Exception("Invalid credentials");
+                        ?? throw new InvalidDataException("Invalid credentials");
 
 
             if (!_passwordHasher.Verify(user.PasswordHash, password))
-                throw new Exception("Invalid credentials");
+                throw new InvalidDataException("Invalid credentials");
 
 
             string accessToken = _jwtProvider.GenerateToken(user);
@@ -40,7 +38,7 @@ namespace Projects_Management_Studio.App.Services
 
             user.RefreshToken = refreshToken;
             user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(2);
-            
+
             await _userRepo.UpdateUserAsync(user);
 
             return (accessToken, refreshToken);
@@ -64,5 +62,27 @@ namespace Projects_Management_Studio.App.Services
             await _userRepo.AddUserAsync(user);
         }
 
+        //
+        //
+        //
+        public async Task<string> RefreshTokenAsync(string email, string refreshToken)
+        {
+            var user = await _userRepo.GetUserByEmailAsync(email);
+
+
+            if (user is null)
+                throw new Exception("Invalid credentials");
+
+            if (user.RefreshTokenExpiryTime <= DateTime.UtcNow)
+                throw new Exception("Invalid credentials");
+
+
+            user.RefreshToken = _jwtProvider.GenerateRefreshToken();
+            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(2);
+
+            await _userRepo.UpdateUserAsync(user);
+
+            return _jwtProvider.GenerateToken(user) ;
+        }
     }
 }
