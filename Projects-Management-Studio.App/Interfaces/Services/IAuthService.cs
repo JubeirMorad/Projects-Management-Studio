@@ -8,6 +8,6 @@ namespace Projects_Management_Studio.App.Services.Interfaces
 
         Task<(string token, string refreshToken)> LoginAsync(string email, string password);
 
-        Task<string> RefreshTokenAsync(string refreshToken);
+        Task<(string RefreshToken, string AccessToken)> RefreshTokenAsync(string refreshToken);
     }
 }

@@ -48,12 +48,18 @@ namespace Projects_Management_Studio.API.Controllers
             }
         }
 
+
+        
         [HttpPost("refresh")]
         public async Task<IActionResult> Refresh(RefreshRequest request)
         {
-            var token = await authService.RefreshTokenAsync(request.RefrshToken);
+            var tokens = await authService.RefreshTokenAsync(request.RefreshToken);
 
-            return Ok(new {token});
+            return Ok(new
+            {
+                tokens.RefreshToken,
+                tokens.AccessToken
+            });
         }
 
     }

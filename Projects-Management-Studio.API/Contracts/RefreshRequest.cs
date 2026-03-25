@@ -7,6 +7,6 @@ namespace Projects_Management_Studio.API.Contracts
 {
     public record RefreshRequest
     (
-        string RefrshToken
+        string RefreshToken
     );
 }

@@ -65,7 +65,7 @@ namespace Projects_Management_Studio.App.Services
         //
         //
         //
-        public async Task<string> RefreshTokenAsync( string refreshToken)
+        public async Task<(string RefreshToken, string AccessToken)> RefreshTokenAsync( string refreshToken)
         {
             var user = await _userRepo.GetUserByRefreshTokenAsync(refreshToken);
 
@@ -82,7 +82,7 @@ namespace Projects_Management_Studio.App.Services
 
             await _userRepo.UpdateUserAsync(user);
 
-            return _jwtProvider.GenerateToken(user) ;
+            return(user.RefreshToken, _jwtProvider.GenerateToken(user));
         }
     }
 }
