@@ -7,7 +7,7 @@ namespace Projects_Management_Studio.App.Interfaces.Repositories
     {
         Task AddUserAsync(User user);
         Task<User?> GetUserByEmailAsync(string email);
-
+        Task<User?> GetUserByRefreshTokenAsync(string refreshToken);
         Task UpdateUserAsync(User user);
     }
 }
