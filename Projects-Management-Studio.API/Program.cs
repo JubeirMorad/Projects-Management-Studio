@@ -61,10 +61,16 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+// test auth in this point 
+app.MapGet("/", () => "you are authenticated.").RequireAuthorization().WithDisplayName("Test");
 
 app.Run();
