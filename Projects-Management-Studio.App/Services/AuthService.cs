@@ -65,9 +65,9 @@ namespace Projects_Management_Studio.App.Services
         //
         //
         //
-        public async Task<string> RefreshTokenAsync(string email, string refreshToken)
+        public async Task<string> RefreshTokenAsync( string refreshToken)
         {
-            var user = await _userRepo.GetUserByEmailAsync(email);
+            var user = await _userRepo.GetUserByRefreshTokenAsync(refreshToken);
 
 
             if (user is null)

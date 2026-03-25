@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Projects_Management_Studio.API.Contracts;
 using Projects_Management_Studio.App.Services.Interfaces;
@@ -14,6 +15,7 @@ namespace Projects_Management_Studio.API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService authService;
+
         public AuthController(IAuthService authService)
         {
             this.authService = authService;
@@ -31,9 +33,27 @@ namespace Projects_Management_Studio.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequest request)
         {
-            await authService.LoginAsync(request.Email, request.Password);
+            try
+            {
+                var output = await authService.LoginAsync(request.Email, request.Password);
+                return Ok(new
+                {
+                    AccessToken = output.token,
+                    RefrshToken = output.refreshToken
+                });
+            }
+            catch (Exception)
+            {
+                return Ok("Invalid email or password.");
+            }
+        }
 
-            return Ok();
+        [HttpPost("refresh")]
+        public async Task<IActionResult> Refresh(RefreshRequest request)
+        {
+            var token = await authService.RefreshTokenAsync(request.RefrshToken);
+
+            return Ok(new {token});
         }
 
     }

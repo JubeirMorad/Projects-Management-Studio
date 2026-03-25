@@ -12,7 +12,7 @@ namespace Projects_Management_Studio.Infra.Authentication
     public class JwtProvider : IJwtProvider
     {
 
-        private const string _Key = "very_secret_key"; // from config  later 
+        private const string _Key = "0000_SUPER_SECRET_KEY_123_11_23354111"; // from config  later 
 
 
         //
