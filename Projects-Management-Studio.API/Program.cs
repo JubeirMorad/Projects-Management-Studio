@@ -6,6 +6,8 @@ using Projects_Management_Studio.Infra.Data;
 using Projects_Management_Studio.Infra.Repostories;
 using Projects_Management_Studio.App.Services.Interfaces;
 using Projects_Management_Studio.App.Services;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,23 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer", options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes("0000_SUPER_SECRET_KEY_123_11_23354111"))
+        };
+    });
+
+builder.Services.AddAuthorization();
 
 
 // add DbContext
