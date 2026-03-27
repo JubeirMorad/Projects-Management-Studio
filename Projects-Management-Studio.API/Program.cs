@@ -49,8 +49,9 @@ builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 // add passwordHasher
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 
-// add AuthenticationService
+// add Services
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IProjectService, ProjectService>();
 
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 

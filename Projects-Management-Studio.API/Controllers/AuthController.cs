@@ -1,12 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http.HttpResults;
+
 using Microsoft.AspNetCore.Mvc;
 using Projects_Management_Studio.API.Contracts;
 using Projects_Management_Studio.App.Services.Interfaces;
-using Projects_Management_Studio.Domain.Entities;
 
 namespace Projects_Management_Studio.API.Controllers
 {
