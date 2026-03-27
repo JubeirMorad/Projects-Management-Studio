@@ -9,5 +9,6 @@ namespace Projects_Management_Studio.App.Interfaces.Repositories
     public interface IProjectRepository
     {
         Task AddAsync(Project project);
+        Task<Project?> GetByNameAsync(string name);
     }
 }
