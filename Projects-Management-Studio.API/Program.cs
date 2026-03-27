@@ -42,8 +42,9 @@ builder.Services.AddDbContext<AppDbContext>(o =>
     o.UseSqlServer(connectionString);
 });
 
-// add userRepository
+// add Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 
 // add passwordHasher
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
