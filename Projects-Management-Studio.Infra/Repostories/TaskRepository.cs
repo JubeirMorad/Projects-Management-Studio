@@ -17,12 +17,21 @@ namespace Projects_Management_Studio.Infra.Repostories
         {
             _context = appDbContext;
         }
+
+        //
         public async Task AddAsync(TaskItem taskItem)
         {
             await _context.Tasks.AddAsync(taskItem);
         }
 
-        public async Task<List<TaskItem>?> GetTasksByUserIdAsync(Guid userId)
+        //
+        public async Task<List<TaskItem>?> GetTasksByProjectIdAsync(Guid projectId)
+        {
+            return await _context.Tasks.Where(t => t.ProjectId == projectId).ToListAsync();
+        }
+
+        //
+        public async Task<List<TaskItem>?> GetTasksByUserIdAsync(Guid? userId)
         {
             return await _context.Tasks
                         .Where(t => t.AssignedToUserId == userId)
