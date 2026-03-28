@@ -10,6 +10,7 @@ namespace Projects_Management_Studio.App.Interfaces.Repositories
     {
         Task AddAsync(Project project);
         Task<Project?> GetByNameAsync(string name);
+        Task<Project?> GetByIdAsync(Guid projectId);
         Task<List<Project>?> GetByOwnerIdAsync(Guid ownerId);
     }
 }

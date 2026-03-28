@@ -18,6 +18,11 @@ namespace Projects_Management_Studio.Infra.Repostories
             _context.SaveChanges();
         }
 
+        public async Task<Project?> GetByIdAsync(Guid projectId)
+        {
+            return await _context.Projects.FirstOrDefaultAsync(p => p.Id == projectId);
+        }
+
         public async Task<Project?> GetByNameAsync(string name)
         {
             return await _context.Projects.FirstOrDefaultAsync(p => p.Name == name);
