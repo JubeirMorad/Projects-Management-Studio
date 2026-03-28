@@ -12,6 +12,6 @@ namespace Projects_Management_Studio.Domain.Entities
         public string? Description { get; set; }
         public Guid OwnerId { get; set; }
         public User Owner { get; set; } = null!;
-        public DateTime GeatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }
