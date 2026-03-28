@@ -31,5 +31,17 @@ namespace Projects_Management_Studio.API.Controllers
 
             return Ok();
         }
+
+
+        [HttpGet("get-my-projects")]
+        [Authorize()]
+        public async Task<IActionResult> GetMyProjects()
+        {
+            Guid OwnerId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+            var projects = await projectService.GetProjectsByOwnerIdAsync(OwnerId);
+
+            return Ok(projects);
+        }
     }
 }
