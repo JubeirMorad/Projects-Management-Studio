@@ -8,6 +8,7 @@ using Projects_Management_Studio.App.Services.Interfaces;
 using Projects_Management_Studio.App.Services;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using Projects_Management_Studio.API.ApiServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,6 +55,13 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
+
+
+// add Api Services >> these are services that will be used by the controllers to interact with the application layer
+builder.Services.AddScoped<ICurrrentUserService, CurrentUserService>();
+builder.Services.AddHttpContextAccessor();
+
+
 
 var app = builder.Build();
 
