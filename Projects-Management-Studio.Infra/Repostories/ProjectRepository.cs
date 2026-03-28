@@ -22,5 +22,13 @@ namespace Projects_Management_Studio.Infra.Repostories
         {
             return await _context.Projects.FirstOrDefaultAsync(p => p.Name == name);
         }
+
+        public async Task<List<Project>?> GetByOwnerIdAsync(Guid ownerId)
+        {
+            List<Project>? projects = await _context.Projects.Where(p => p.OwnerId == ownerId)
+                                                             .ToListAsync();
+            
+            return projects;
+        }
     }
 }
