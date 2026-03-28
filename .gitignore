@@ -1,5 +1,12 @@
 appsettings.json
-Projects-Management-Studio.API/obj
-Projects-Management-Studio.Domain/obj
-Projects-Management-Studio.App/obj
-Projects-Management-Studio.Infra/obj
+
+Projects-Management-Studio.API/obj/
+Projects-Management-Studio.API/bin/
+Projects-Management-Studio.Domain/obj/
+Projects-Management-Studio.Domain/bin/
+Projects-Management-Studio.App/obj/
+Projects-Management-Studio.App/bin/
+Projects-Management-Studio.Infra/obj/
+Projects-Management-Studio.Infra/bin/
+
+.vscode
