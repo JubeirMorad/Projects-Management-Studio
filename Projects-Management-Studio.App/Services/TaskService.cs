@@ -12,17 +12,34 @@ namespace Projects_Management_Studio.App.Services
     public class TaskService : ITaskService
     {
         private readonly ITaskRepository _taskRepo;
+        private readonly IUserRepository _userRepo;
+        private readonly IProjectRepository _projectRepo;
 
         //
-        public TaskService(ITaskRepository taskRepository)
+        public TaskService(ITaskRepository taskRepository, IUserRepository userRepository, IProjectRepository projectRepository)
         {
             _taskRepo = taskRepository;
+            _projectRepo = projectRepository;
+            _userRepo = userRepository;
         }
 
 
         //
         public async Task CreateTaskAsync(string title, string? description, Guid projectId, Guid? AssignedToUserId)
         {
+
+            // check user // alow null
+            if (AssignedToUserId is not null)
+            {
+                if (await _userRepo.GetUserByIdAsync(AssignedToUserId.Value) is null)
+                    throw new Exception("user not found.");
+            }
+
+            // check project
+            if (await _projectRepo.GetByIdAsync(projectId) is null)
+                throw new Exception("project not found.");
+
+
             TaskItem task = new()
             {
                 Id = Guid.NewGuid(),
