@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
+
 using System.Security.Claims;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Projects_Management_Studio.API.Contracts.Projects;
@@ -15,21 +12,38 @@ namespace Projects_Management_Studio.API.Controllers
     public class ProjectsController : ControllerBase
     {
         private readonly IProjectService projectService;
+        private readonly ICurrrentUserService currrentUser;
 
-        public ProjectsController(IProjectService projectService)
+        public ProjectsController(IProjectService projectService, ICurrrentUserService currrentUser)
         {
             this.projectService = projectService;
+            this.currrentUser = currrentUser;
         }
 
+
+        //
         [HttpPost("New")]
         [Authorize()]
         public async Task<IActionResult> NewProject(AddNewProjectRequest request)
         {
-            Guid OwnerId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            Guid OwnerId = currrentUser.UserId;
             
             await projectService.AddNewProjectAsync(request.Name, request.Description, OwnerId);
 
             return Ok();
+        }
+
+
+        //
+        [HttpGet("get-my-projects")]
+        [Authorize()]
+        public async Task<IActionResult> GetMyProjects()
+        {
+            Guid OwnerId = currrentUser.UserId;
+
+            var projects = await projectService.GetProjectsByOwnerIdAsync(OwnerId);
+
+            return Ok(projects);
         }
     }
 }

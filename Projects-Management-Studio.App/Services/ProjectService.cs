@@ -30,5 +30,10 @@ namespace Projects_Management_Studio.App.Services
 
             await _projectRepo.AddAsync(project);
         }
+
+        public async Task<List<Project>?> GetProjectsByOwnerIdAsync(Guid ownerId)
+        {
+            return await _projectRepo.GetByOwnerIdAsync(ownerId);
+        }
     }
 }
