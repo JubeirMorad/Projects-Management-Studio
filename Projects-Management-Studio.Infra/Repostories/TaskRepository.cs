@@ -22,6 +22,7 @@ namespace Projects_Management_Studio.Infra.Repostories
         public async Task AddAsync(TaskItem taskItem)
         {
             await _context.Tasks.AddAsync(taskItem);
+            await _context.SaveChangesAsync();
         }
 
         //
