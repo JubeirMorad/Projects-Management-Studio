@@ -1,1 +1,5 @@
 appsettings.json
+Projects-Management-Studio.API/obj
+Projects-Management-Studio.Domain/obj
+Projects-Management-Studio.App/obj
+Projects-Management-Studio.Infra/obj
