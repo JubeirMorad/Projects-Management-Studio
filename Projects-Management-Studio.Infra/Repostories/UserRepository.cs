@@ -45,5 +45,10 @@ namespace Projects_Management_Studio.Infra.Repostories
         {
             return await _context.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
         }
+
+        public async Task<User?> GetUserByIdAsync(Guid userId)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+        }
     }
 }
