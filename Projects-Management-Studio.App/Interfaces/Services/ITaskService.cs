@@ -1,0 +1,16 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Projects_Management_Studio.Domain.Entities;
+
+namespace Projects_Management_Studio.App.Interfaces.Services
+{
+    public interface ITaskService
+    {
+        Task CreateTaskAsync(string title, string? description, Guid projectId, Guid? AssignedToUserId);
+        Task<List<TaskItem>?> GetTasksUserAsync(Guid? userId);
+        Task<List<TaskItem>?> GetTasksProjectAsync(Guid projectId);
+
+    }
+}
