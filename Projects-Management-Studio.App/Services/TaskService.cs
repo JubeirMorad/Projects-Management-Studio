@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Threading.Tasks.Sources;
 using Projects_Management_Studio.App.Interfaces.Repositories;
 using Projects_Management_Studio.App.Interfaces.Services;
 using Projects_Management_Studio.Domain.Entities;
@@ -25,7 +20,7 @@ namespace Projects_Management_Studio.App.Services
 
 
         //
-        public async Task CreateTaskAsync(Guid OwnerId, string title, string? description, Guid projectId, Guid? AssignedToUserId)
+        public async Task CreateTaskAsync(Guid userId, string title, string? description, Guid projectId, Guid? AssignedToUserId)
         {
 
             // check user // alow null
@@ -39,7 +34,7 @@ namespace Projects_Management_Studio.App.Services
             var project = await _projectRepo.GetByIdAsync(projectId)
                                 ??    throw new Exception("project not found.");
 
-            if (project.OwnerId != OwnerId)
+            if (project.OwnerId != userId)
                 throw new Exception("you have no permision to add task here.");
 
             TaskItem task = new()
@@ -66,5 +61,29 @@ namespace Projects_Management_Studio.App.Services
             return await _taskRepo.GetTasksByUserIdAsync(userId);
         }
 
+
+        //
+        public async Task AssignTaskAsync(Guid userId, Guid taskId, Guid? assignedToUserId)
+        {
+            // check user // alow null
+            if (assignedToUserId is not null)
+            {
+                if (await _userRepo.GetUserByIdAsync(assignedToUserId.Value) is null)
+                    throw new Exception("user not found.");
+            }
+
+            var task = await _taskRepo.GetByIdAsync(taskId)
+                                ??    throw new Exception("task not found.");
+
+            var project = await _projectRepo.GetByIdAsync(task.ProjectId)
+                                ??    throw new Exception("project not found.");
+
+            if (project.OwnerId != userId)
+                throw new Exception("you have no permision to assign task here.");
+
+            task.AssignedToUserId = assignedToUserId;
+
+            await _taskRepo.UpdateAsync(task);
+        }
     }
 }
