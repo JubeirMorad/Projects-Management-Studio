@@ -13,6 +13,6 @@ namespace Projects_Management_Studio.App.Interfaces.Services
         Task<List<TaskItem>?> GetTasksProjectAsync(Guid projectId);
 
         Task AssignTaskAsync(Guid userId, Guid taskId, Guid? assignedToUserId);
-
+        Task UpdateTaskAsync(Guid userId, Guid taskId, string title, string? description);
     }
 }

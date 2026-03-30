@@ -85,5 +85,24 @@ namespace Projects_Management_Studio.App.Services
 
             await _taskRepo.UpdateAsync(task);
         }
+
+
+        //
+        public async Task UpdateTaskAsync(Guid userId, Guid taskId, string title, string? description)
+        {
+            var task = await _taskRepo.GetByIdAsync(taskId)
+                                ??    throw new Exception("task not found.");
+
+            var project = await _projectRepo.GetByIdAsync(task.ProjectId)
+                                ??    throw new Exception("project not found.");
+
+            if (project.OwnerId != userId)
+                throw new Exception("you have no permision to update task here.");
+
+            task.Title = title;
+            task.Description = description;
+
+            await _taskRepo.UpdateAsync(task);
+        }
     }
 }
