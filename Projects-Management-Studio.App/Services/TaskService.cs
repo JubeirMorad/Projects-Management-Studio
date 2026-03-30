@@ -25,7 +25,7 @@ namespace Projects_Management_Studio.App.Services
 
 
         //
-        public async Task CreateTaskAsync(string title, string? description, Guid projectId, Guid? AssignedToUserId)
+        public async Task CreateTaskAsync(Guid OwnerId, string title, string? description, Guid projectId, Guid? AssignedToUserId)
         {
 
             // check user // alow null
@@ -36,9 +36,11 @@ namespace Projects_Management_Studio.App.Services
             }
 
             // check project
-            if (await _projectRepo.GetByIdAsync(projectId) is null)
-                throw new Exception("project not found.");
+            var project = await _projectRepo.GetByIdAsync(projectId)
+                                ??    throw new Exception("project not found.");
 
+            if (project.OwnerId != OwnerId)
+                throw new Exception("you have no permision to add task here.");
 
             TaskItem task = new()
             {

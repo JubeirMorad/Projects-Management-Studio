@@ -8,7 +8,7 @@ namespace Projects_Management_Studio.App.Interfaces.Services
 {
     public interface ITaskService
     {
-        Task CreateTaskAsync(string title, string? description, Guid projectId, Guid? AssignedToUserId);
+        Task CreateTaskAsync(Guid OwnerId, string title, string? description, Guid projectId, Guid? AssignedToUserId);
         Task<List<TaskItem>?> GetTasksUserAsync(Guid? userId);
         Task<List<TaskItem>?> GetTasksProjectAsync(Guid projectId);
 

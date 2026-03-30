@@ -28,8 +28,11 @@ namespace Projects_Management_Studio.API.Controllers
         [HttpPost("New")]
         public async Task<IActionResult> NewTask(AddNewTaskRequest request)
         {
+            Guid OwnerId = currrentUser.UserId;
+            
             await taskService.CreateTaskAsync
             (
+                OwnerId,
                 request.Title,
                 request.Description,
                 request.ProjectId,
