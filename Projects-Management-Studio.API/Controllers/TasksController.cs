@@ -62,5 +62,17 @@ namespace Projects_Management_Studio.API.Controllers
             return Ok(tasks);
         } 
 
+
+        
+        [HttpPatch("assign")]
+        // Role = "Admin" later
+        public async Task<IActionResult> AssignTask(AssignTaskRequest request)
+        {
+            var userId = currrentUser.UserId;
+
+            await taskService.AssignTaskAsync(userId, request.TaskId, request.AssignedToUserId);
+            return Ok();
+        }
+
     }
 }
