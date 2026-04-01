@@ -1,7 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
+using Projects_Management_Studio.Domain.Enums;
 
 namespace Projects_Management_Studio.Domain.Entities
 {
@@ -17,7 +15,7 @@ namespace Projects_Management_Studio.Domain.Entities
         public Guid? AssignedToUserId { get; set; }
         public User? AssignedToUser { get; set; }
         //
-        public string Status { get; set; } = "ToDo";
+        public TaskItemStatus Status { get; set; } = TaskItemStatus.ToDo;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     }
