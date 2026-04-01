@@ -26,7 +26,7 @@ namespace Projects_Management_Studio.API.Controllers
         public async Task<IActionResult> NewTask(AddNewTaskRequest request)
         {
             Guid userId = currrentUser.UserId;
-            
+
             await taskService.CreateTaskAsync
             (
                 userId,
@@ -55,17 +55,17 @@ namespace Projects_Management_Studio.API.Controllers
 
 
         [HttpGet("get-project-tasks")]
-         //Roles = "Admin" later
+        //Roles = "Admin" later
         public async Task<IActionResult> GetProjectTasks(GetProjectTasksRequest request)
         {
 
             var tasks = await taskService.GetTasksProjectAsync(request.ProjectId);
 
             return Ok(tasks);
-        } 
+        }
 
 
-        
+
         [HttpPatch("assign")]
         // Role = "Admin" later
         public async Task<IActionResult> AssignTask(AssignTaskRequest request)
@@ -82,9 +82,19 @@ namespace Projects_Management_Studio.API.Controllers
         // Role = Project manager later
         public async Task UpdateTask([FromRoute] Guid taskId, [FromBody] UpdateTaskRequest request)
         {
-            Guid userId = currrentUser.UserId ;
+            Guid userId = currrentUser.UserId;
             await taskService.UpdateTaskAsync(userId, taskId, request.Title, request.Description);
         }
 
+
+
+        [HttpPatch("Update/{taskId}/Status")]
+        // Role = Dev , later
+        public async Task UpdateTask(Guid taskId, UpdateStatusRequest request)
+        {
+            Guid userId = currrentUser.UserId;
+
+            await taskService.UpdateTaskStatusAsync(userId, taskId, request.Status);
+        }
     }
 }
