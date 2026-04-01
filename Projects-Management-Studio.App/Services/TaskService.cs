@@ -1,6 +1,7 @@
 using Projects_Management_Studio.App.Interfaces.Repositories;
 using Projects_Management_Studio.App.Interfaces.Services;
 using Projects_Management_Studio.Domain.Entities;
+using Projects_Management_Studio.Domain.Enums;
 
 namespace Projects_Management_Studio.App.Services
 {
@@ -32,7 +33,7 @@ namespace Projects_Management_Studio.App.Services
 
             // check project
             var project = await _projectRepo.GetByIdAsync(projectId)
-                                ??    throw new Exception("project not found.");
+                                ?? throw new Exception("project not found.");
 
             if (project.OwnerId != userId)
                 throw new Exception("you have no permision to add task here.");
@@ -73,10 +74,10 @@ namespace Projects_Management_Studio.App.Services
             }
 
             var task = await _taskRepo.GetByIdAsync(taskId)
-                                ??    throw new Exception("task not found.");
+                                ?? throw new Exception("task not found.");
 
             var project = await _projectRepo.GetByIdAsync(task.ProjectId)
-                                ??    throw new Exception("project not found.");
+                                ?? throw new Exception("project not found.");
 
             if (project.OwnerId != userId)
                 throw new Exception("you have no permision to assign task here.");
@@ -91,16 +92,33 @@ namespace Projects_Management_Studio.App.Services
         public async Task UpdateTaskAsync(Guid userId, Guid taskId, string title, string? description)
         {
             var task = await _taskRepo.GetByIdAsync(taskId)
-                                ??    throw new Exception("task not found.");
+                                ?? throw new Exception("task not found.");
 
             var project = await _projectRepo.GetByIdAsync(task.ProjectId)
-                                ??    throw new Exception("project not found.");
+                                ?? throw new Exception("project not found.");
 
             if (project.OwnerId != userId)
                 throw new Exception("you have no permision to update task here.");
 
             task.Title = title;
             task.Description = description;
+
+            await _taskRepo.UpdateAsync(task);
+        }
+
+
+        //
+        public async Task UpdateTaskStatusAsync(Guid userId, Guid taskId, TaskItemStatus status)
+        {
+            var task = await _taskRepo.GetByIdAsync(taskId);
+
+            if (task is null)
+                throw new Exception("task not found.");
+
+            if (task.AssignedToUserId != userId)
+                throw new Exception("Unauthorized.");
+
+            task.Status = status;
 
             await _taskRepo.UpdateAsync(task);
         }
