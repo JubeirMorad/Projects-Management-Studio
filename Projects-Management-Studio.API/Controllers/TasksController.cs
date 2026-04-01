@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Projects_Management_Studio.API.Contracts.Tasks;
@@ -42,6 +39,8 @@ namespace Projects_Management_Studio.API.Controllers
             return Ok();
         }
 
+
+
         [HttpGet("get-my-tasks")]
         public async Task<IActionResult> GetMyTasks()
         {
@@ -51,6 +50,9 @@ namespace Projects_Management_Studio.API.Controllers
 
             return Ok(tasks);
         }
+
+
+
 
         [HttpGet("get-project-tasks")]
          //Roles = "Admin" later
@@ -72,6 +74,16 @@ namespace Projects_Management_Studio.API.Controllers
 
             await taskService.AssignTaskAsync(userId, request.TaskId, request.AssignedToUserId);
             return Ok();
+        }
+
+
+
+        [HttpPatch("Update/{taskId}")]
+        // Role = Project manager later
+        public async Task UpdateTask([FromRoute] Guid taskId, [FromBody] UpdateTaskRequest request)
+        {
+            Guid userId = currrentUser.UserId ;
+            await taskService.UpdateTaskAsync(userId, taskId, request.Title, request.Description);
         }
 
     }
