@@ -50,6 +50,10 @@ namespace Projects_Management_Studio.App.Services
         //
         public async Task RegisterAsync(string userName, string email, string password)
         {
+            if (await _userRepo.GetUserByEmailAsync(email) is not null)
+                throw new Exception($"user with {email} already exists.");
+
+                
             var hashedPassword = _passwordHasher.Hash(password);
 
             var user = new User()
