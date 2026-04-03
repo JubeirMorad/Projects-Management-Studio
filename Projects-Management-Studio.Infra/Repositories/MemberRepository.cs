@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Projects_Management_Studio.App.Interfaces.Repositories;
 using Projects_Management_Studio.Domain.Entities;
@@ -18,19 +14,45 @@ namespace Projects_Management_Studio.Infra.Repositories
             _context = context;
         }
 
+
+        //
+        //
+        public async Task AddAsync(ProjectMember member)
+        {
+            await _context.ProjectMembers.AddAsync(member);
+            await _context.SaveChangesAsync();
+        }
+
+
+        //
+        //
         public async Task<ProjectMember?> GetByIdAsync(Guid id)
         {
             return await _context.ProjectMembers.FirstOrDefaultAsync(m => m.Id == id);
         }
 
+
+        //
+        //
         public async Task<List<ProjectMember>?> GetByProjectIdAsync(Guid projectId)
         {
             return await _context.ProjectMembers.Where(m => m.ProjectId == projectId).ToListAsync();
         }
 
+        //
+        //
         public async Task<List<ProjectMember>?> GetByUserIdAsync(Guid userId)
         {
             return await _context.ProjectMembers.Where(m => m.UserId == userId).ToListAsync();
         }
+
+
+        //
+        //
+        public async Task<ProjectMember?> GetMemberByUserIdAndProjectIdAsync(Guid userId, Guid projectId)
+        {
+            return await _context.ProjectMembers.FirstOrDefaultAsync(m => m.UserId == userId && m.ProjectId == projectId);
+        }
+
     }
 }
