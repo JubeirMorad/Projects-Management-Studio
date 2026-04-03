@@ -4,7 +4,10 @@ namespace Projects_Management_Studio.App.Interfaces.Services
 {
     public interface IMemberService
     {
-        Task<ProjectMember?> GetMemberByIdAsync(Guid memberId);
+
+        Task CreateMemberAsync(Guid currentUserId, Guid projectId, Guid userId); // current user must be owner of the project
+
+        Task<ProjectMember?> GetMemberByIdAsync( Guid memberId); 
 
         Task<List<ProjectMember>?> GetProjectMembersAsync(Guid userId, Guid projectId);
 
