@@ -1,0 +1,36 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Projects_Management_Studio.App.Interfaces.Services;
+
+namespace Projects_Management_Studio.API.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    [Authorize]
+    public class MembersController : ControllerBase
+    {
+        private readonly IMemberService _memberService;
+        private readonly ICurrrentUserService _currentUser;
+
+        public MembersController(IMemberService memberService, ICurrrentUserService currrentUserService)
+        {
+            _memberService = memberService;
+            _currentUser = currrentUserService;
+        }
+
+
+        [HttpGet("{projectId:Guid}")]
+        public async Task<IActionResult> GetByPorject(Guid projectId)
+        {
+            Guid userId = _currentUser.UserId;
+
+            var result = await _memberService.GetProjectMembersAsync(userId, projectId);
+
+            return Ok(result);
+        }
+    }
+}
