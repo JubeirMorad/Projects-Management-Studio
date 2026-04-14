@@ -23,12 +23,32 @@ namespace Projects_Management_Studio.API.Controllers
         }
 
 
-        [HttpGet("{projectId:Guid}")]
+        [HttpGet("project/{projectId:Guid}")]
         public async Task<IActionResult> GetByPorject(Guid projectId)
         {
             Guid userId = _currentUser.UserId;
 
             var result = await _memberService.GetProjectMembersAsync(userId, projectId);
+
+            return Ok(result);
+        }
+
+
+
+        [HttpGet("get-my-members")]
+        public async Task<IActionResult> GetMyMembers()
+        {
+            Guid userId = _currentUser.UserId;
+            var result = await _memberService.GetUserMembersAsync(userId);
+
+            return Ok(result);
+        }
+
+
+        [HttpGet("{memberId:Guid}")]
+        public async Task<IActionResult> GetById(Guid memberId)
+        {
+            var result = await _memberService.GetMemberByIdAsync(memberId);
 
             return Ok(result);
         }
