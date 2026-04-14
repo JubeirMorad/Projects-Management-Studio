@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi;
+using Projects_Management_Studio.API.Contracts.Members;
 using Projects_Management_Studio.App.Interfaces.Services;
 
 namespace Projects_Management_Studio.API.Controllers
@@ -46,11 +48,23 @@ namespace Projects_Management_Studio.API.Controllers
 
 
         [HttpGet("{memberId:Guid}")]
+        //admin only
         public async Task<IActionResult> GetById(Guid memberId)
         {
             var result = await _memberService.GetMemberByIdAsync(memberId);
 
             return Ok(result);
+        }
+
+        [HttpPost("new")]
+        //admin only
+        public async Task<IActionResult> add(AddMemberRequest request)
+        {
+            Guid userId = _currentUser.UserId;
+
+            await _memberService.CreateMemberAsync(userId, request.ProjectId, request.UserId);
+
+            return Ok();
         }
     }
 }
