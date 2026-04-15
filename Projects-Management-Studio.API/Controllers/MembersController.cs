@@ -66,5 +66,19 @@ namespace Projects_Management_Studio.API.Controllers
 
             return Ok();
         }
+
+        [HttpPut("{memberId:Guid}/update")]
+        // admin only
+        public async Task<IActionResult> UpdateMember(Guid memberId, UpdateMemberRequest request)
+        {
+            Guid userId = _currentUser.UserId;
+
+            await _memberService.UpdateMemberAsync(userId, memberId, request.ProjectId, request.UserId, request.Role);
+
+            return Ok();
+        }
+
+
+        
     }
 }
