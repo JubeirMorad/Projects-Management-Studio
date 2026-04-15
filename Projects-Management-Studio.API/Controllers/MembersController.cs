@@ -56,6 +56,7 @@ namespace Projects_Management_Studio.API.Controllers
             return Ok(result);
         }
 
+
         [HttpPost("{projectId}")]
         //admin only
         public async Task<IActionResult> add(Guid projectId ,AddMemberRequest request)
