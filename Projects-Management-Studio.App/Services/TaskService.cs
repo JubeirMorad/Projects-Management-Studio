@@ -10,13 +10,15 @@ namespace Projects_Management_Studio.App.Services
         private readonly ITaskRepository _taskRepo;
         private readonly IUserRepository _userRepo;
         private readonly IProjectRepository _projectRepo;
+        private readonly IMemberRepository _memberRepository;
 
         //
-        public TaskService(ITaskRepository taskRepository, IUserRepository userRepository, IProjectRepository projectRepository)
+        public TaskService(ITaskRepository taskRepository, IUserRepository userRepository, IProjectRepository projectRepository, IMemberRepository memberRepository)
         {
             _taskRepo = taskRepository;
             _projectRepo = projectRepository;
             _userRepo = userRepository;
+            _memberRepository = memberRepository;
         }
 
 
@@ -81,6 +83,17 @@ namespace Projects_Management_Studio.App.Services
 
             if (project.OwnerId != userId)
                 throw new Exception("you have no permision to assign task here.");
+    
+
+            // check if the assigned user is a member of the project
+            if (assignedToUserId is not null)
+            {
+                bool isMember = await _memberRepository.IsExistAsync(project.Id, assignedToUserId.Value);
+                
+                if (isMember == false)
+                    throw new Exception("user is not a member of the project.");
+            }
+
 
             task.AssignedToUserId = assignedToUserId;
 
