@@ -54,5 +54,14 @@ namespace Projects_Management_Studio.Infra.Repositories
             return await _context.ProjectMembers.FirstOrDefaultAsync(m => m.UserId == userId && m.ProjectId == projectId);
         }
 
+        //
+        //
+        public async Task UpdateAsync(ProjectMember member)
+        {
+            _context.ProjectMembers.Update(member);
+
+            await _context.SaveChangesAsync();
+        }
+
     }
 }

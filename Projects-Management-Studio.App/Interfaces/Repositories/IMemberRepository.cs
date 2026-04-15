@@ -11,6 +11,8 @@ namespace Projects_Management_Studio.App.Interfaces.Repositories
         Task<List<ProjectMember>?> GetByUserIdAsync(Guid userId);
         Task<List<ProjectMember>?> GetByProjectIdAsync(Guid projectId);
 
-        Task<ProjectMember?> GetMemberByUserIdAndProjectIdAsync(Guid userId, Guid projectId);  
+        Task<ProjectMember?> GetMemberByUserIdAndProjectIdAsync(Guid userId, Guid projectId);
+
+        Task UpdateAsync(ProjectMember member);
     }
 }
