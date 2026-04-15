@@ -56,18 +56,18 @@ namespace Projects_Management_Studio.API.Controllers
             return Ok(result);
         }
 
-        [HttpPost("new")]
+        [HttpPost("{projectId}")]
         //admin only
-        public async Task<IActionResult> add(AddMemberRequest request)
+        public async Task<IActionResult> add(Guid projectId ,AddMemberRequest request)
         {
             Guid userId = _currentUser.UserId;
 
-            await _memberService.CreateMemberAsync(userId, request.ProjectId, request.UserId);
+            await _memberService.CreateMemberAsync(userId, projectId, request.UserId, request.Role);
 
             return Ok();
         }
 
-        [HttpPut("{memberId:Guid}/update")]
+        [HttpPut("{memberId:Guid}")]
         // admin only
         public async Task<IActionResult> UpdateMember(Guid memberId, UpdateMemberRequest request)
         {
@@ -79,6 +79,6 @@ namespace Projects_Management_Studio.API.Controllers
         }
 
 
-        
+
     }
 }

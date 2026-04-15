@@ -17,7 +17,7 @@ namespace Projects_Management_Studio.App.Services
             _userRepo = userRepository;
         }
 
-        public async Task CreateMemberAsync(Guid currentUserId, Guid projectId, Guid userId) // current user must be owner of the project
+        public async Task CreateMemberAsync(Guid currentUserId, Guid projectId, Guid userId, string role) // current user must be owner of the project
         {
 
             if ( await _projectRepo.GetByIdAsync(projectId) is not Project project)
@@ -45,7 +45,8 @@ namespace Projects_Management_Studio.App.Services
             {
                 Id = Guid.NewGuid(),
                 UserId = userId,
-                ProjectId = projectId
+                ProjectId = projectId,
+                Role = role 
             };
 
             await _memberRepo.AddAsync(member);

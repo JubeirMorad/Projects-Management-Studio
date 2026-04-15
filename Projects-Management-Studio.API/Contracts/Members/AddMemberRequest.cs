@@ -7,7 +7,7 @@ namespace Projects_Management_Studio.API.Contracts.Members
 {
     public record AddMemberRequest
     (
-        Guid ProjectId,
-        Guid UserId
+        Guid UserId,
+        string Role
     );
 }

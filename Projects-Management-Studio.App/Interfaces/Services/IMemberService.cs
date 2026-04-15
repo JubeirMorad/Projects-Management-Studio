@@ -5,7 +5,7 @@ namespace Projects_Management_Studio.App.Interfaces.Services
     public interface IMemberService
     {
 
-        Task CreateMemberAsync(Guid currentUserId, Guid projectId, Guid userId); // current user must be owner of the project
+        Task CreateMemberAsync(Guid currentUserId, Guid projectId, Guid userId, string Role); // current user must be owner of the project
 
         Task<ProjectMember?> GetMemberByIdAsync(Guid memberId);
 
