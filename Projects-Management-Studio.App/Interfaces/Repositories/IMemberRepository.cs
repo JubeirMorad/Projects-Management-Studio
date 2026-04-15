@@ -14,5 +14,9 @@ namespace Projects_Management_Studio.App.Interfaces.Repositories
         Task<ProjectMember?> GetMemberByUserIdAndProjectIdAsync(Guid userId, Guid projectId);
 
         Task UpdateAsync(ProjectMember member);
+
+        Task DeleteAsync(ProjectMember member);
+        Task<bool> IsExistAsync(Guid userId, Guid projectId);
+    
     }
 }

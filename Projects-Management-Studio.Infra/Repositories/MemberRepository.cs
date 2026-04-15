@@ -26,6 +26,15 @@ namespace Projects_Management_Studio.Infra.Repositories
 
         //
         //
+        public async Task DeleteAsync(ProjectMember member)
+        {
+            _context.ProjectMembers.Remove(member);
+            await _context.SaveChangesAsync();
+        }
+
+
+        //
+        //
         public async Task<ProjectMember?> GetByIdAsync(Guid id)
         {
             return await _context.ProjectMembers.FirstOrDefaultAsync(m => m.Id == id);
@@ -52,6 +61,14 @@ namespace Projects_Management_Studio.Infra.Repositories
         public async Task<ProjectMember?> GetMemberByUserIdAndProjectIdAsync(Guid userId, Guid projectId)
         {
             return await _context.ProjectMembers.FirstOrDefaultAsync(m => m.UserId == userId && m.ProjectId == projectId);
+        }
+
+
+        //
+        //
+        public async Task<bool> IsExistAsync(Guid userId, Guid projectId)
+        {
+            return await _context.ProjectMembers.AnyAsync(m => m.UserId == userId && m.ProjectId == projectId);
         }
 
         //
