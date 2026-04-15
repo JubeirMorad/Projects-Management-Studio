@@ -80,6 +80,49 @@ namespace Projects_Management_Studio.App.Services
         }
 
 
+        //
+        //
+        public async Task UpdateMemberAsync(Guid ownerId, Guid memberId, Guid projectId, Guid userId, string role)
+        {
+
+            User? user = await _userRepo.GetUserByIdAsync(ownerId);
+
+            if (user is null)
+                throw new Exception("user not found.");
+
+
+            Project? project = await _projectRepo.GetByIdAsync(projectId);
+
+            if (project is null)
+                throw new Exception("project not found.");
+
+            if (userId != project.OwnerId)
+                throw new Exception("you have no permmision to update this member.");
+
+            ProjectMember? member = await _memberRepo.GetByIdAsync(memberId);
+
+            if (member is null)
+                throw new Exception("project member not found.");
+
+
+            
+            if (member.ProjectId == projectId && member.UserId == userId && member.Role == role)
+                return;
+
+
+            // update project id
+            member.ProjectId = projectId;
+
+            // update user id
+            member.UserId = userId;
+
+            //update role
+            member.Role = role;
+
+            await _memberRepo.UpdateAsync(member);
+        }
+
+
 
 
 
