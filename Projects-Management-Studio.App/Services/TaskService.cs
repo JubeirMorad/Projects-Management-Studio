@@ -23,13 +23,13 @@ namespace Projects_Management_Studio.App.Services
 
 
         //
-        public async Task CreateTaskAsync(Guid userId, string title, string? description, Guid projectId, Guid? AssignedToUserId)
+        public async Task CreateTaskAsync(Guid userId, string title, string? description, Guid projectId, Guid? assignedToUserId)
         {
 
             // check user // alow null
-            if (AssignedToUserId is not null)
+            if (assignedToUserId is not null)
             {
-                if (await _userRepo.GetUserByIdAsync(AssignedToUserId.Value) is null)
+                if (await _userRepo.GetUserByIdAsync(assignedToUserId.Value) is null)
                     throw new Exception("user not found.");
             }
 
@@ -40,13 +40,22 @@ namespace Projects_Management_Studio.App.Services
             if (project.OwnerId != userId)
                 throw new Exception("you have no permision to add task here.");
 
+            // check if the assigned user is a member of the project
+            if (assignedToUserId is not null)
+            {
+                bool isMember = await _memberRepository.IsExistAsync(project.Id, assignedToUserId.Value);
+                
+                if (isMember == false)
+                    throw new Exception("user is not a member of the project.");
+            }
+
             TaskItem task = new()
             {
                 Id = Guid.NewGuid(),
                 Title = title,
                 Description = description,
                 ProjectId = projectId,
-                AssignedToUserId = AssignedToUserId
+                AssignedToUserId = assignedToUserId
             };
 
             await _taskRepo.AddAsync(task);
@@ -89,7 +98,7 @@ namespace Projects_Management_Studio.App.Services
             if (assignedToUserId is not null)
             {
                 bool isMember = await _memberRepository.IsExistAsync(project.Id, assignedToUserId.Value);
-                
+
                 if (isMember == false)
                     throw new Exception("user is not a member of the project.");
             }
