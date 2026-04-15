@@ -13,5 +13,8 @@ namespace Projects_Management_Studio.Domain.Entities
         public Guid OwnerId { get; set; }
         public User Owner { get; set; } = null!;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public ICollection<ProjectMember> Members { get; set; } = new HashSet<ProjectMember>();
+        public ICollection<TaskItem> Tasks { get; set; } = new HashSet<TaskItem>();
     }
 }

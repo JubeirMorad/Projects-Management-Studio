@@ -20,6 +20,10 @@ namespace Projects_Management_Studio.Domain.Entities
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public string? RefreshToken { get; set; }
-        public DateTime? RefreshTokenExpiryTime { get; set; } 
+        public DateTime? RefreshTokenExpiryTime { get; set; }
+
+        public ICollection<TaskItem> Tasks { get; set; } = new HashSet<TaskItem>();
+        public ICollection<ProjectMember> Members { get; set; } = new HashSet<ProjectMember>();
+
     }
 }
