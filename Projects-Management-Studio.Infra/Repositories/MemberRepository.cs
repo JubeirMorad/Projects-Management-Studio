@@ -24,6 +24,12 @@ namespace Projects_Management_Studio.Infra.Repositories
         }
 
 
+        public void Add(ProjectMember member)
+        {
+            _context.ProjectMembers.Add(member);
+        }
+
+
         //
         //
         public async Task DeleteAsync(ProjectMember member)
