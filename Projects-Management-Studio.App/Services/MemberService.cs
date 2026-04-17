@@ -98,7 +98,7 @@ namespace Projects_Management_Studio.App.Services
             }
 
             _memberRepo.Delete(member);
-            
+            _taskRepo.UpdateRange(tasks);
             await _unitOfWork.SaveChangesAsync();
         }
 
