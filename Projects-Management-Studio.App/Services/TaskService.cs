@@ -11,14 +11,16 @@ namespace Projects_Management_Studio.App.Services
         private readonly IUserRepository _userRepo;
         private readonly IProjectRepository _projectRepo;
         private readonly IMemberRepository _memberRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         //
-        public TaskService(ITaskRepository taskRepository, IUserRepository userRepository, IProjectRepository projectRepository, IMemberRepository memberRepository)
+        public TaskService(ITaskRepository taskRepository, IUserRepository userRepository, IProjectRepository projectRepository, IMemberRepository memberRepository, IUnitOfWork unitOfWork)
         {
             _taskRepo = taskRepository;
             _projectRepo = projectRepository;
             _userRepo = userRepository;
             _memberRepository = memberRepository;
+            _unitOfWork = unitOfWork;
         }
 
 
@@ -92,7 +94,7 @@ namespace Projects_Management_Studio.App.Services
 
             if (project.OwnerId != userId)
                 throw new Exception("you have no permision to assign task here.");
-    
+
 
             // check if the assigned user is a member of the project
             if (assignedToUserId is not null)
@@ -106,7 +108,8 @@ namespace Projects_Management_Studio.App.Services
 
             task.AssignedToUserId = assignedToUserId;
 
-            await _taskRepo.UpdateAsync(task);
+            _taskRepo.Update(task);
+            await _unitOfWork.SaveChangesAsync();
         }
 
 
@@ -125,7 +128,8 @@ namespace Projects_Management_Studio.App.Services
             task.Title = title;
             task.Description = description;
 
-            await _taskRepo.UpdateAsync(task);
+            _taskRepo.Update(task);
+            await _unitOfWork.SaveChangesAsync();
         }
 
 
@@ -142,7 +146,8 @@ namespace Projects_Management_Studio.App.Services
 
             task.Status = status;
 
-            await _taskRepo.UpdateAsync(task);
+            _taskRepo.Update(task);
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

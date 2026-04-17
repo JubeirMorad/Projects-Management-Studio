@@ -49,6 +49,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 builder.Services.AddScoped<IMemberRepository, MemberRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 // add passwordHasher
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();

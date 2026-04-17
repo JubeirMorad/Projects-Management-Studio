@@ -46,10 +46,9 @@ namespace Projects_Management_Studio.Infra.Repostories
         }
 
         //
-        public async Task UpdateAsync(TaskItem taskItem)
+        public void Update(TaskItem taskItem)
         {
             _context.Tasks.Update(taskItem);
-            await _context.SaveChangesAsync();
         }
 
         public Task<List<TaskItem>> GetTasksByUserIdAndProjectIdAsync(Guid userId, Guid projectId)
@@ -58,6 +57,14 @@ namespace Projects_Management_Studio.Infra.Repostories
                     .AsNoTracking()
                     .Where(t => t.AssignedToUserId == userId && t.ProjectId == projectId)
                     .ToListAsync();
+        }
+
+
+        //
+        //
+        public void UpdateRange(IEnumerable<TaskItem> tasks)
+        {
+            _context.Tasks.UpdateRange(tasks);
         }
     }
 }
