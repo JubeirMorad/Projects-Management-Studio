@@ -135,7 +135,7 @@ namespace Projects_Management_Studio.App.Services
         public async Task UpdateMemberAsync(Guid ownerId, Guid projectId, Guid userId, string newRole)
         {
 
-            User? user = await _userRepo.GetUserByIdAsync(ownerId);
+            User? user = await _userRepo.GetUserByIdAsync(userId);
 
             if (user is null)
                 throw new Exception("user not found.");
@@ -146,7 +146,7 @@ namespace Projects_Management_Studio.App.Services
             if (project is null)
                 throw new Exception("project not found.");
 
-            if (userId != project.OwnerId)
+            if (ownerId != project.OwnerId)
                 throw new Exception("you have no permmision to update this member.");
 
             ProjectMember? member = await _memberRepo.GetMemberByUserIdAndProjectIdAsync(userId, projectId);
@@ -154,6 +154,11 @@ namespace Projects_Management_Studio.App.Services
             if (member is null)
                 throw new Exception("project member not found.");
 
+
+            // if user is also owner 
+            if (userId == ownerId)
+                throw new Exception("cannot edit this project member.");
+            
             
             if (member.Role == newRole)
                 return;
