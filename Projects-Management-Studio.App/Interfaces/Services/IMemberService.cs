@@ -15,5 +15,7 @@ namespace Projects_Management_Studio.App.Interfaces.Services
 
         Task UpdateMemberAsync(Guid ownerId, Guid memberId, Guid projectId, Guid userId, string role);
 
+        Task DeleteMemberAsync(Guid memberId);
+
     }
 }

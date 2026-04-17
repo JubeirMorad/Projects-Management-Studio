@@ -56,6 +56,15 @@ namespace Projects_Management_Studio.App.Services
             
         }
 
+        public Task DeleteMemberAsync(Guid memberId)
+        {
+            if (_memberRepo.GetByIdAsync(memberId).Result is not ProjectMember member)
+                throw new Exception("Project member not found.");
+            _memberRepo.Delete(member);
+            
+            return _unitOfWork.SaveChangesAsync();
+        }
+
 
         //
         //
