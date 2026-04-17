@@ -9,6 +9,7 @@ using Projects_Management_Studio.App.Services;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Projects_Management_Studio.API.ApiServices;
+using Projects_Management_Studio.Infra.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,6 +48,7 @@ builder.Services.AddDbContext<AppDbContext>(o =>
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<ITaskRepository, TaskRepository>();
+builder.Services.AddScoped<IMemberRepository, MemberRepository>();
 
 // add passwordHasher
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
@@ -55,6 +57,7 @@ builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<ITaskService, TaskService>();
+builder.Services.AddScoped<IMemberService, MemberService>();
 
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 

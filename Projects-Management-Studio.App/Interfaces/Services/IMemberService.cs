@@ -9,9 +9,9 @@ namespace Projects_Management_Studio.App.Interfaces.Services
 
         Task<ProjectMember?> GetMemberByIdAsync(Guid memberId);
 
-        Task<List<ProjectMember>?> GetProjectMembersAsync(Guid userId, Guid projectId);
+        Task<List<ProjectMember>> GetProjectMembersAsync(Guid userId, Guid projectId);
 
-        Task<List<ProjectMember>?> GetUserMembersAsync(Guid userId);
+        Task<List<ProjectMember>> GetUserMembersAsync(Guid userId);
 
         Task UpdateMemberAsync(Guid ownerId, Guid memberId, Guid projectId, Guid userId, string role);
 

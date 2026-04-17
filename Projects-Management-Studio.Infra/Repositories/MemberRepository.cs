@@ -15,13 +15,6 @@ namespace Projects_Management_Studio.Infra.Repositories
         }
 
 
-        //
-        //
-        public async Task AddAsync(ProjectMember member)
-        {
-            await _context.ProjectMembers.AddAsync(member);
-            await _context.SaveChangesAsync();
-        }
 
 
         public void Add(ProjectMember member)
@@ -32,10 +25,9 @@ namespace Projects_Management_Studio.Infra.Repositories
 
         //
         //
-        public async Task DeleteAsync(ProjectMember member)
+        public void Delete(ProjectMember member)
         {
             _context.ProjectMembers.Remove(member);
-            await _context.SaveChangesAsync();
         }
 
 
@@ -49,14 +41,14 @@ namespace Projects_Management_Studio.Infra.Repositories
 
         //
         //
-        public async Task<List<ProjectMember>?> GetByProjectIdAsync(Guid projectId)
+        public async Task<List<ProjectMember>> GetByProjectIdAsync(Guid projectId)
         {
-            return await _context.ProjectMembers.Where(m => m.ProjectId == projectId).ToListAsync();
+            return await _context.ProjectMembers.AsNoTracking().Where(m => m.ProjectId == projectId).ToListAsync();
         }
 
         //
         //
-        public async Task<List<ProjectMember>?> GetByUserIdAsync(Guid userId)
+        public async Task<List<ProjectMember>> GetByUserIdAsync(Guid userId)
         {
             return await _context.ProjectMembers.Where(m => m.UserId == userId).ToListAsync();
         }
@@ -66,7 +58,7 @@ namespace Projects_Management_Studio.Infra.Repositories
         //
         public async Task<ProjectMember?> GetMemberByUserIdAndProjectIdAsync(Guid userId, Guid projectId)
         {
-            return await _context.ProjectMembers.FirstOrDefaultAsync(m => m.UserId == userId && m.ProjectId == projectId);
+            return await _context.ProjectMembers.AsNoTracking().FirstOrDefaultAsync(m => m.UserId == userId && m.ProjectId == projectId);
         }
 
 
@@ -74,16 +66,14 @@ namespace Projects_Management_Studio.Infra.Repositories
         //
         public async Task<bool> IsExistAsync(Guid userId, Guid projectId)
         {
-            return await _context.ProjectMembers.AnyAsync(m => m.UserId == userId && m.ProjectId == projectId);
+            return await _context.ProjectMembers.AsNoTracking().AnyAsync(m => m.UserId == userId && m.ProjectId == projectId);
         }
 
         //
         //
-        public async Task UpdateAsync(ProjectMember member)
+        public void Update(ProjectMember member)
         {
             _context.ProjectMembers.Update(member);
-
-            await _context.SaveChangesAsync();
         }
 
     }

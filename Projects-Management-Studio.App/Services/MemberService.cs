@@ -9,12 +9,14 @@ namespace Projects_Management_Studio.App.Services
         private readonly IMemberRepository _memberRepo;
         private readonly IProjectRepository _projectRepo;
         private readonly IUserRepository _userRepo;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public MemberService(IMemberRepository memberRepository, IProjectRepository projectRepository, IUserRepository userRepository)
+        public MemberService(IMemberRepository memberRepository, IProjectRepository projectRepository, IUserRepository userRepository, IUnitOfWork unitOfWork)
         {
             _memberRepo = memberRepository;
             _projectRepo = projectRepository;
             _userRepo = userRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task CreateMemberAsync(Guid currentUserId, Guid projectId, Guid userId, string role) // current user must be owner of the project
@@ -49,7 +51,8 @@ namespace Projects_Management_Studio.App.Services
                 Role = role 
             };
 
-            await _memberRepo.AddAsync(member);
+            _memberRepo.Add(member);
+            await _unitOfWork.SaveChangesAsync();
             
         }
 
@@ -64,7 +67,7 @@ namespace Projects_Management_Studio.App.Services
 
         //
         //
-        public async Task<List<ProjectMember>?> GetProjectMembersAsync(Guid userId, Guid projectId)
+        public async Task<List<ProjectMember>> GetProjectMembersAsync(Guid userId, Guid projectId)
         {
             if (! await IsUserProjectMember(userId, projectId))
                 throw new UnauthorizedAccessException("You are not a member of the project.");
@@ -75,7 +78,7 @@ namespace Projects_Management_Studio.App.Services
 
         //
         //
-        public async Task<List<ProjectMember>?> GetUserMembersAsync(Guid userId)
+        public async Task<List<ProjectMember>> GetUserMembersAsync(Guid userId)
         {
             return await _memberRepo.GetByUserIdAsync(userId);
         }
@@ -120,7 +123,8 @@ namespace Projects_Management_Studio.App.Services
             //update role
             member.Role = role;
 
-            await _memberRepo.UpdateAsync(member);
+            _memberRepo.Update(member);
+            await _unitOfWork.SaveChangesAsync();
         }
 
 
