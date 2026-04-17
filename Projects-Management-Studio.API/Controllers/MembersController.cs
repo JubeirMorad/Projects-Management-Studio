@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi;
 using Projects_Management_Studio.API.Contracts.Members;
 using Projects_Management_Studio.App.Interfaces.Services;
+using Projects_Management_Studio.Domain.Entities;
 
 namespace Projects_Management_Studio.API.Controllers
 {
@@ -68,13 +69,13 @@ namespace Projects_Management_Studio.API.Controllers
             return Ok();
         }
 
-        [HttpPut("{memberId:Guid}")]
+        [HttpPut("{projectId}")]
         // admin only
-        public async Task<IActionResult> UpdateMember(Guid memberId, UpdateMemberRequest request)
+        public async Task<IActionResult> UpdateMemberRole(Guid projectId , UpdateMemberRequest request)
         {
             Guid userId = _currentUser.UserId;
 
-            await _memberService.UpdateMemberAsync(userId, memberId, request.ProjectId, request.UserId, request.Role);
+            await _memberService.UpdateMemberAsync(userId, projectId, request.UserId, request.Role);
 
             return Ok();
         }

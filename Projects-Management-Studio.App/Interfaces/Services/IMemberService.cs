@@ -13,7 +13,7 @@ namespace Projects_Management_Studio.App.Interfaces.Services
 
         Task<List<ProjectMember>> GetUserMembersAsync(Guid userId);
 
-        Task UpdateMemberAsync(Guid ownerId, Guid memberId, Guid projectId, Guid userId, string role);
+        Task UpdateMemberAsync(Guid ownerId, Guid projectId, Guid userId, string newRole);
 
         Task DeleteMemberAsync(Guid currentUserId, Guid userId, Guid projectId);
 
