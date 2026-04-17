@@ -51,5 +51,13 @@ namespace Projects_Management_Studio.Infra.Repostories
             _context.Tasks.Update(taskItem);
             await _context.SaveChangesAsync();
         }
+
+        public Task<List<TaskItem>> GetTasksByUserIdAndProjectIdAsync(Guid userId, Guid projectId)
+        {
+            return _context.Tasks
+                    .AsNoTracking()
+                    .Where(t => t.AssignedToUserId == userId && t.ProjectId == projectId)
+                    .ToListAsync();
+        }
     }
 }

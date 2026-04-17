@@ -10,13 +10,15 @@ namespace Projects_Management_Studio.App.Services
         private readonly IProjectRepository _projectRepo;
         private readonly IUserRepository _userRepo;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ITaskRepository _taskRepo;
 
-        public MemberService(IMemberRepository memberRepository, IProjectRepository projectRepository, IUserRepository userRepository, IUnitOfWork unitOfWork)
+        public MemberService(IMemberRepository memberRepository, IProjectRepository projectRepository, IUserRepository userRepository, IUnitOfWork unitOfWork, ITaskRepository taskRepository)
         {
             _memberRepo = memberRepository;
             _projectRepo = projectRepository;
             _userRepo = userRepository;
             _unitOfWork = unitOfWork;
+            _taskRepo = taskRepository;
         }
 
         public async Task CreateMemberAsync(Guid currentUserId, Guid projectId, Guid userId, string role) // current user must be owner of the project
@@ -56,13 +58,48 @@ namespace Projects_Management_Studio.App.Services
             
         }
 
-        public Task DeleteMemberAsync(Guid memberId)
+
+
+        //
+        //
+        //
+        public async Task DeleteMemberAsync(Guid currentUserId, Guid userId, Guid projectId)
         {
-            if (_memberRepo.GetByIdAsync(memberId).Result is not ProjectMember member)
+            ProjectMember member =  await _memberRepo.GetMemberByUserIdAndProjectIdAsync(userId, projectId) ??
                 throw new Exception("Project member not found.");
+
+
+            // check if the project exists
+            Project project = await _projectRepo.GetByIdAsync(projectId) ??
+                throw new Exception("Project not found.");
+
+
+
+            // check if the user exists
+
+            User user = await _userRepo.GetUserByIdAsync(userId) ??
+                throw new Exception("User not found.");
+
+
+            // check if the current user is the owner of the project
+            if (currentUserId != project.OwnerId)
+                throw new Exception("Only the project owner can delete members.");
+
+            if (member.UserId == currentUserId)
+                throw new Exception("You cannot remove yourself from the project.");
+
+
+            // update tasks 
+            var tasks = await _taskRepo.GetTasksByUserIdAndProjectIdAsync(userId, projectId);
+
+            foreach(TaskItem task in tasks)
+            {
+                task.AssignedToUserId = null;
+            }
+
             _memberRepo.Delete(member);
             
-            return _unitOfWork.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync();
         }
 
 

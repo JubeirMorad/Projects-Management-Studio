@@ -81,5 +81,15 @@ namespace Projects_Management_Studio.API.Controllers
 
 
 
+        [HttpDelete("{ProjectId:Guid}")]
+        // admin only
+        public async Task<IActionResult> DeleteMember(Guid ProjectId, DeleteMemberRequest request)
+        {
+            Guid currentUserId = _currentUser.UserId;
+            await _memberService.DeleteMemberAsync(currentUserId, request.UserId, ProjectId);
+
+            return Ok();
+        }
+
     }
 }

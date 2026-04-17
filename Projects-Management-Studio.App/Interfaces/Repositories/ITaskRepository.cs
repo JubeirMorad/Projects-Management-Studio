@@ -11,6 +11,7 @@ namespace Projects_Management_Studio.App.Interfaces.Repositories
         Task AddAsync(TaskItem taskItem);
         Task<List<TaskItem>?> GetTasksByUserIdAsync(Guid? userId);
         Task<List<TaskItem>?> GetTasksByProjectIdAsync(Guid projectId);
+        Task<List<TaskItem>> GetTasksByUserIdAndProjectIdAsync(Guid userId, Guid projectId);
         Task<TaskItem?> GetByIdAsync(Guid taskId);
         Task UpdateAsync(TaskItem taskItem);
     }
