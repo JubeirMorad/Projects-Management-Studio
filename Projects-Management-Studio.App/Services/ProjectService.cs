@@ -8,16 +8,25 @@ namespace Projects_Management_Studio.App.Services
     public class ProjectService : IProjectService
     {
         private readonly IProjectRepository _projectRepo;
+        private readonly IMemberRepository _memberRepo;
+        private readonly IUserRepository _userRepo;
 
-        public ProjectService(IProjectRepository projectRepository)
+        public ProjectService(IProjectRepository projectRepository, IMemberRepository memberRepository, IUserRepository userRepository)
         {
             _projectRepo = projectRepository;
+            _memberRepo = memberRepository;
+            _userRepo = userRepository;
         }
 
         public async Task AddNewProjectAsync(string name, string? description, Guid ownerId)
         {
             if (await _projectRepo.GetByNameAsync(name) is not null)
                 throw new Exception ("project's name is already exist.");
+
+            User? user = await _userRepo.GetUserByIdAsync(ownerId);
+
+            if (user is null)
+                throw new Exception("user with this id not found.");
 
 
             Project project = new()
@@ -27,7 +36,18 @@ namespace Projects_Management_Studio.App.Services
                 Description = description,
                 OwnerId = ownerId 
             };
+            
 
+            ProjectMember projectMember = new()
+            {
+                Id = Guid.NewGuid(),
+                ProjectId = project.Id,
+                UserId = ownerId,
+                Role = "Manager"
+            };
+
+            _memberRepo.Add(projectMember); // without save changes
+            
             await _projectRepo.AddAsync(project);
         }
 
