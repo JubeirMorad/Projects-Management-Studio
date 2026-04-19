@@ -50,7 +50,7 @@ namespace Projects_Management_Studio.Infra.Repositories
         //
         public async Task<List<ProjectMember>> GetByUserIdAsync(Guid userId)
         {
-            return await _context.ProjectMembers.Where(m => m.UserId == userId).ToListAsync();
+            return await _context.ProjectMembers.AsNoTracking().Where(m => m.UserId == userId).ToListAsync();
         }
 
 

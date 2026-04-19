@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 using Microsoft.EntityFrameworkCore;
 using Projects_Management_Studio.App.Interfaces.Repositories;
 using Projects_Management_Studio.Domain.Entities;
@@ -19,22 +16,24 @@ namespace Projects_Management_Studio.Infra.Repostories
         }
 
         //
-        public async Task AddAsync(TaskItem taskItem)
+        public void Add(TaskItem taskItem)
         {
-            await _context.Tasks.AddAsync(taskItem);
-            await _context.SaveChangesAsync();
+             _context.Tasks.Add(taskItem);
         }
 
         //
-        public async Task<List<TaskItem>?> GetTasksByProjectIdAsync(Guid projectId)
-        {
-            return await _context.Tasks.Where(t => t.ProjectId == projectId).ToListAsync();
-        }
-
-        //
-        public async Task<List<TaskItem>?> GetTasksByUserIdAsync(Guid? userId)
+        public async Task<List<TaskItem>> GetTasksByProjectIdAsync(Guid projectId)
         {
             return await _context.Tasks
+                        .AsNoTracking()
+                        .Where(t => t.ProjectId == projectId).ToListAsync();
+        }
+
+        //
+        public async Task<List<TaskItem>> GetTasksByUserIdAsync(Guid? userId)
+        {
+            return await _context.Tasks
+                        .AsNoTracking()
                         .Where(t => t.AssignedToUserId == userId)
                         .ToListAsync();
         }

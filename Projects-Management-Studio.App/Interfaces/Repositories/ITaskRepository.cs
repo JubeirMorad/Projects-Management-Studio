@@ -8,9 +8,9 @@ namespace Projects_Management_Studio.App.Interfaces.Repositories
 {
     public interface ITaskRepository
     {
-        Task AddAsync(TaskItem taskItem);
-        Task<List<TaskItem>?> GetTasksByUserIdAsync(Guid? userId);
-        Task<List<TaskItem>?> GetTasksByProjectIdAsync(Guid projectId);
+        void Add(TaskItem taskItem);
+        Task<List<TaskItem>> GetTasksByUserIdAsync(Guid? userId);
+        Task<List<TaskItem>> GetTasksByProjectIdAsync(Guid projectId);
         Task<List<TaskItem>> GetTasksByUserIdAndProjectIdAsync(Guid userId, Guid projectId);
         Task<TaskItem?> GetByIdAsync(Guid taskId);
         void Update(TaskItem taskItem);

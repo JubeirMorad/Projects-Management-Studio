@@ -60,7 +60,8 @@ namespace Projects_Management_Studio.App.Services
                 AssignedToUserId = assignedToUserId
             };
 
-            await _taskRepo.AddAsync(task);
+            _taskRepo.Add(task);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task<List<TaskItem>?> GetTasksProjectAsync(Guid projectId)
