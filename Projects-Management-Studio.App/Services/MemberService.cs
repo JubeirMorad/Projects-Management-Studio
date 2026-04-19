@@ -25,6 +25,12 @@ namespace Projects_Management_Studio.App.Services
         public async Task CreateMemberAsync(Guid currentUserId, Guid projectId, Guid userId, ProjectRole role) // current user must be owner of the project
         {
 
+            // check for valid role
+            if(!Enum.IsDefined(typeof(ProjectRole), role))
+                throw new Exception("Invalid project role.");
+
+
+
             if ( await _projectRepo.GetByIdAsync(projectId) is not Project project)
                 throw new Exception("Project does not exist.");
 
@@ -135,6 +141,11 @@ namespace Projects_Management_Studio.App.Services
         //
         public async Task UpdateMemberAsync(Guid ownerId, Guid projectId, Guid userId, ProjectRole newRole)
         {
+            
+            // check for valid role
+            if(!Enum.IsDefined(typeof(ProjectRole), newRole))
+                throw new Exception("Invalid project role.");
+
 
             User? user = await _userRepo.GetUserByIdAsync(userId);
 
