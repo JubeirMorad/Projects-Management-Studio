@@ -79,13 +79,6 @@ namespace Projects_Management_Studio.App.Services
         //
         public async Task AssignTaskAsync(Guid userId, Guid taskId, Guid? assignedToUserId)
         {
-            // check user // alow null
-            if (assignedToUserId is not null)
-            {
-                if (await _userRepo.GetUserByIdAsync(assignedToUserId.Value) is null)
-                    throw new Exception("user not found.");
-            }
-
             var task = await _taskRepo.GetByIdAsync(taskId)
                                 ?? throw new Exception("task not found.");
 

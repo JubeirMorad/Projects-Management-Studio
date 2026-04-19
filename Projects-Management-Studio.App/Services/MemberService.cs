@@ -116,7 +116,7 @@ namespace Projects_Management_Studio.App.Services
         public async Task<List<ProjectMember>> GetProjectMembersAsync(Guid userId, Guid projectId)
         {
             if (! await IsUserProjectMember(userId, projectId))
-                throw new UnauthorizedAccessException("You are not a member of the project.");
+                throw new Exception("You are not a member of the project.");
 
             return await _memberRepo.GetByProjectIdAsync(projectId);
         }
