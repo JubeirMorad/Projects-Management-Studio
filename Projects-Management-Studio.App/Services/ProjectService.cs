@@ -10,12 +10,14 @@ namespace Projects_Management_Studio.App.Services
         private readonly IProjectRepository _projectRepo;
         private readonly IMemberRepository _memberRepo;
         private readonly IUserRepository _userRepo;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public ProjectService(IProjectRepository projectRepository, IMemberRepository memberRepository, IUserRepository userRepository)
+        public ProjectService(IProjectRepository projectRepository, IMemberRepository memberRepository, IUserRepository userRepository, IUnitOfWork unitOfWork)
         {
             _projectRepo = projectRepository;
             _memberRepo = memberRepository;
             _userRepo = userRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task AddNewProjectAsync(string name, string? description, Guid ownerId)
@@ -48,7 +50,8 @@ namespace Projects_Management_Studio.App.Services
 
             _memberRepo.Add(projectMember); // without save changes
             
-            await _projectRepo.AddAsync(project);
+            _projectRepo.Add(project);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task<List<Project>?> GetProjectsByOwnerIdAsync(Guid ownerId)

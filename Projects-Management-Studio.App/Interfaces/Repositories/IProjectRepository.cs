@@ -8,9 +8,9 @@ namespace Projects_Management_Studio.App.Interfaces.Repositories
 {
     public interface IProjectRepository
     {
-        Task AddAsync(Project project);
+        void Add(Project project);
         Task<Project?> GetByNameAsync(string name);
         Task<Project?> GetByIdAsync(Guid projectId);
-        Task<List<Project>?> GetByOwnerIdAsync(Guid ownerId);
+        Task<List<Project>> GetByOwnerIdAsync(Guid ownerId);
     }
 }

@@ -12,10 +12,9 @@ namespace Projects_Management_Studio.Infra.Repostories
         {
             _context = appDbContext;
         }
-        public async Task AddAsync(Project project)
+        public void Add(Project project)
         {
-            await _context.Projects.AddAsync(project);
-            _context.SaveChanges();
+            _context.Projects.Add(project);
         }
 
         public async Task<Project?> GetByIdAsync(Guid projectId)
@@ -28,12 +27,12 @@ namespace Projects_Management_Studio.Infra.Repostories
             return await _context.Projects.FirstOrDefaultAsync(p => p.Name == name);
         }
 
-        public async Task<List<Project>?> GetByOwnerIdAsync(Guid ownerId)
+        public async Task<List<Project>> GetByOwnerIdAsync(Guid ownerId)
         {
-            List<Project>? projects = await _context.Projects.Where(p => p.OwnerId == ownerId)
-                                                             .ToListAsync();
-            
-            return projects;
+            return   await _context.Projects
+                            .AsNoTracking()
+                            .Where(p => p.OwnerId == ownerId)
+                            .ToListAsync();
         }
     }
 }
