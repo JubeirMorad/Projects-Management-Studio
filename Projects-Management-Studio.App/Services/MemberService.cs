@@ -1,6 +1,7 @@
 using Projects_Management_Studio.App.Interfaces.Repositories;
 using Projects_Management_Studio.App.Interfaces.Services;
 using Projects_Management_Studio.Domain.Entities;
+using Projects_Management_Studio.Domain.Enums;
 
 namespace Projects_Management_Studio.App.Services
 {
@@ -21,7 +22,7 @@ namespace Projects_Management_Studio.App.Services
             _taskRepo = taskRepository;
         }
 
-        public async Task CreateMemberAsync(Guid currentUserId, Guid projectId, Guid userId, string role) // current user must be owner of the project
+        public async Task CreateMemberAsync(Guid currentUserId, Guid projectId, Guid userId, ProjectRole role) // current user must be owner of the project
         {
 
             if ( await _projectRepo.GetByIdAsync(projectId) is not Project project)
@@ -132,7 +133,7 @@ namespace Projects_Management_Studio.App.Services
 
         //
         //
-        public async Task UpdateMemberAsync(Guid ownerId, Guid projectId, Guid userId, string newRole)
+        public async Task UpdateMemberAsync(Guid ownerId, Guid projectId, Guid userId, ProjectRole newRole)
         {
 
             User? user = await _userRepo.GetUserByIdAsync(userId);

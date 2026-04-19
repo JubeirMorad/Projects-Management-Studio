@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Projects_Management_Studio.Domain.Enums;
 
 namespace Projects_Management_Studio.Domain.Entities
 {
@@ -15,6 +16,6 @@ namespace Projects_Management_Studio.Domain.Entities
         public Guid UserId { get; set; }
         public User User { get; set; } = null!;
     
-        public string Role { get; set; } = "Member";
+        public ProjectRole Role { get; set; } = ProjectRole.Member;
     }
 }

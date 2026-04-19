@@ -45,7 +45,6 @@ namespace Projects_Management_Studio.App.Services
                 Id = Guid.NewGuid(),
                 ProjectId = project.Id,
                 UserId = ownerId,
-                Role = "Manager"
             };
 
             _memberRepo.Add(projectMember); // without save changes

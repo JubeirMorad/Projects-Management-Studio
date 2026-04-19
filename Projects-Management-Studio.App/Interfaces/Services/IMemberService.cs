@@ -1,11 +1,12 @@
 using Projects_Management_Studio.Domain.Entities;
+using Projects_Management_Studio.Domain.Enums;
 
 namespace Projects_Management_Studio.App.Interfaces.Services
 {
     public interface IMemberService
     {
 
-        Task CreateMemberAsync(Guid currentUserId, Guid projectId, Guid userId, string Role); // current user must be owner of the project
+        Task CreateMemberAsync(Guid currentUserId, Guid projectId, Guid userId, ProjectRole Role); // current user must be owner of the project
 
         Task<ProjectMember?> GetMemberByIdAsync(Guid memberId);
 
@@ -13,7 +14,7 @@ namespace Projects_Management_Studio.App.Interfaces.Services
 
         Task<List<ProjectMember>> GetUserMembersAsync(Guid userId);
 
-        Task UpdateMemberAsync(Guid ownerId, Guid projectId, Guid userId, string newRole);
+        Task UpdateMemberAsync(Guid ownerId, Guid projectId, Guid userId, ProjectRole newRole);
 
         Task DeleteMemberAsync(Guid currentUserId, Guid userId, Guid projectId);
 
