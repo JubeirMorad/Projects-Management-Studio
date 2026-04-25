@@ -35,21 +35,45 @@ namespace Projects_Management_Studio.App.Services
                 throw new Exception("Project does not exist.");
 
 
+            // note : The owner is not considered a member of the project. => if current user is owner, currentMember = null 
+            var currentMember = await _memberRepo.GetMemberByUserIdAndProjectIdAsync(currentUserId, projectId); 
+
+
+            // check if the current user is the owner of the project or admin
             if (project.OwnerId != currentUserId)
-                throw new UnauthorizedAccessException("Only the project owner can add members.");
+            {
+
+                if (currentMember is null)
+                    throw new Exception("You are not a member of the project.");
+
+                if (currentMember.Role != ProjectRole.Admin)
+                        throw new Exception("Only the project owner and project admin can add members.");
+            }
 
 
-            if (await _userRepo.GetUserByIdAsync(currentUserId) is null )
-                throw new Exception("User does not exist.");
+            // check if the user try to add project owner as member
+            if (project.OwnerId == userId)
+                throw new Exception("The project owner is already a member of the project.");
 
 
+            // check if the user try to add him self as member
             if ( userId == currentUserId)
                 throw new Exception("connot set your self as member");
 
 
+            // check if the user exists
+            if (await _userRepo.GetUserByIdAsync(userId) is null)
+                throw new Exception("User does not exist.");
+
+
+            // check if the user exists
             if (await IsUserProjectMember(userId, projectId))
                 throw new Exception("User is already a member of the project.");
 
+
+            // check if member is admin and current user is also admin, only owner can assign admin role
+            if (role == ProjectRole.Admin && currentMember?.Role == ProjectRole.Admin)
+                throw new Exception("Only the project owner can assign admin role.");
 
 
             var member = new ProjectMember()
@@ -122,6 +146,9 @@ namespace Projects_Management_Studio.App.Services
         //
         public async Task<List<ProjectMember>> GetProjectMembersAsync(Guid userId, Guid projectId)
         {
+            if (await _projectRepo.GetByIdAsync(projectId) is null)
+                throw new Exception("Project not found.");
+
             if (! await IsUserProjectMember(userId, projectId))
                 throw new Exception("You are not a member of the project.");
 
@@ -158,20 +185,21 @@ namespace Projects_Management_Studio.App.Services
             if (project is null)
                 throw new Exception("project not found.");
 
+            if (project.OwnerId == userId)
+                throw new Exception("cannot update role of the project owner.");
+
+            // check if the current user is the owner of the project
             if (ownerId != project.OwnerId)
                 throw new Exception("you have no permmision to update this member.");
 
             ProjectMember? member = await _memberRepo.GetMemberByUserIdAndProjectIdAsync(userId, projectId);
 
+            // check if the member exists
             if (member is null)
                 throw new Exception("project member not found.");
 
-
-            // if user is also owner 
-            if (userId == ownerId)
-                throw new Exception("cannot edit this project member.");
             
-            
+            // check if role is the same
             if (member.Role == newRole)
                 return;
 
