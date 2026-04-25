@@ -146,10 +146,10 @@ namespace Projects_Management_Studio.App.Services
         //
         public async Task<List<ProjectMember>> GetProjectMembersAsync(Guid userId, Guid projectId)
         {
-            if (await _projectRepo.GetByIdAsync(projectId) is null)
+            if (await _projectRepo.GetByIdAsync(projectId) is not Project project)
                 throw new Exception("Project not found.");
 
-            if (! await IsUserProjectMember(userId, projectId))
+            if (! await IsUserProjectMember(userId, projectId) && userId != project.OwnerId)
                 throw new Exception("You are not a member of the project.");
 
             return await _memberRepo.GetByProjectIdAsync(projectId);
