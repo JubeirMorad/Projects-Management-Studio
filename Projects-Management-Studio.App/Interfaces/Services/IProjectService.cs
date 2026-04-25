@@ -7,6 +7,6 @@ namespace Projects_Management_Studio.App.Interfaces.Services
     {
         Task AddNewProjectAsync(string name, string? description, Guid ownerId);
 
-        Task<List<Project>> GetProjectsByOwnerIdAsync(Guid ownerId);
+        Task<List<Project>> GetMyProjectsAsync(Guid userId);
     }
 }

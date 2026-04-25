@@ -35,13 +35,13 @@ namespace Projects_Management_Studio.API.Controllers
 
 
         //
-        [HttpGet("get-my-projects")]
+        [HttpGet("my-projects")]
         [Authorize()]
         public async Task<IActionResult> GetMyProjects()
         {
             Guid OwnerId = currrentUser.UserId;
 
-            var projects = await projectService.GetProjectsByOwnerIdAsync(OwnerId);
+            var projects = await projectService.GetMyProjectsAsync(OwnerId);
 
             return Ok(projects);
         }

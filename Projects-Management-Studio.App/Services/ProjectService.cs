@@ -11,7 +11,7 @@ namespace Projects_Management_Studio.App.Services
         private readonly IUserRepository _userRepo;
         private readonly IUnitOfWork _unitOfWork;
 
-        public ProjectService(IProjectRepository projectRepository,  IUserRepository userRepository, IUnitOfWork unitOfWork)
+        public ProjectService(IProjectRepository projectRepository, IUserRepository userRepository, IUnitOfWork unitOfWork)
         {
             _projectRepo = projectRepository;
             _userRepo = userRepository;
@@ -21,7 +21,7 @@ namespace Projects_Management_Studio.App.Services
         public async Task AddNewProjectAsync(string name, string? description, Guid ownerId)
         {
             if (await _projectRepo.GetByNameAsync(name) is not null)
-                throw new Exception ("project's name is already exist.");
+                throw new Exception("project's name is already exist.");
 
             User? user = await _userRepo.GetUserByIdAsync(ownerId);
 
@@ -34,16 +34,18 @@ namespace Projects_Management_Studio.App.Services
                 Id = Guid.NewGuid(),
                 Name = name,
                 Description = description,
-                OwnerId = ownerId 
+                OwnerId = ownerId
             };
-            
+
             _projectRepo.Add(project);
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<List<Project>> GetProjectsByOwnerIdAsync(Guid ownerId)
+        public async Task<List<Project>> GetMyProjectsAsync(Guid userId)
         {
-            return await _projectRepo.GetByOwnerIdAsync(ownerId);
+            return await _projectRepo.GetProjectsByUserIdAsyn(userId);
         }
+
+        
     }
 }
