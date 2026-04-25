@@ -27,12 +27,14 @@ namespace Projects_Management_Studio.Infra.Repostories
             return await _context.Projects.FirstOrDefaultAsync(p => p.Name == name);
         }
 
-        public async Task<List<Project>> GetByOwnerIdAsync(Guid ownerId)
+        
+        
+        public async Task<List<Project>> GetProjectsByUserIdAsyn(Guid userId)
         {
-            return   await _context.Projects
-                            .AsNoTracking()
-                            .Where(p => p.OwnerId == ownerId)
-                            .ToListAsync();
+            return await _context.Projects.AsNoTracking().Where(
+                    p => p.OwnerId == userId ||
+                    p.Members.Any(m => m.UserId == userId)
+            ).ToListAsync();
         }
     }
 }
