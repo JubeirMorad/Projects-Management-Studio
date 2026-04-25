@@ -69,13 +69,13 @@ namespace Projects_Management_Studio.API.Controllers
             return Ok();
         }
 
-        [HttpPut("{projectId}")]
+        [HttpPatch("{projectId:Guid}/{userId:Guid}/role")]
         // admin only
-        public async Task<IActionResult> UpdateMemberRole(Guid projectId , UpdateMemberRequest request)
+        public async Task<IActionResult> UpdateMemberRole(Guid projectId , Guid userId , UpdateMemberRequest request)
         {
-            Guid userId = _currentUser.UserId;
+            Guid currentUserId = _currentUser.UserId;
 
-            await _memberService.UpdateMemberAsync(userId, projectId, request.UserId, request.Role);
+            await _memberService.UpdateMemberAsync(currentUserId, projectId, userId, request.Role);
 
             return Ok();
         }
