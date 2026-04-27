@@ -1,3 +1,4 @@
+using Projects_Management_Studio.App.DTOs.ProjectMembers;
 using Projects_Management_Studio.Domain.Entities;
 using Projects_Management_Studio.Domain.Enums;
 
@@ -10,7 +11,7 @@ namespace Projects_Management_Studio.App.Interfaces.Services
 
         Task<ProjectMember?> GetMemberByIdAsync(Guid memberId);
 
-        Task<List<ProjectMember>> GetProjectMembersAsync(Guid userId, Guid projectId);
+        Task<List<GetMemberByProjectDto>> GetProjectMembersAsync(Guid userId, Guid projectId);
 
         Task<List<ProjectMember>> GetUserMembersAsync(Guid userId);
 

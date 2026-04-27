@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Projects_Management_Studio.App.DTOs.ProjectMembers;
 using Projects_Management_Studio.App.Interfaces.Repositories;
 using Projects_Management_Studio.Domain.Entities;
 using Projects_Management_Studio.Infra.Data;
@@ -41,9 +42,17 @@ namespace Projects_Management_Studio.Infra.Repositories
 
         //
         //
-        public async Task<List<ProjectMember>> GetByProjectIdAsync(Guid projectId)
+        public async Task<List<GetMemberByProjectDto>> GetByProjectIdAsync(Guid projectId, Guid currentUserId)
         {
-            return await _context.ProjectMembers.AsNoTracking().Where(m => m.ProjectId == projectId).ToListAsync();
+            return await _context.ProjectMembers.AsNoTracking()
+                        .Where(m => m.ProjectId == projectId)
+                        .Select( m => new GetMemberByProjectDto(
+                            m.UserId,
+                            m.User.Username,
+                            m.Role.ToString(),
+                            m.UserId == currentUserId
+                        ))
+                        .ToListAsync();
         }
 
         //

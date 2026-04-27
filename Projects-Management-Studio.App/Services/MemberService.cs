@@ -1,3 +1,4 @@
+using Projects_Management_Studio.App.DTOs.ProjectMembers;
 using Projects_Management_Studio.App.Interfaces.Repositories;
 using Projects_Management_Studio.App.Interfaces.Services;
 using Projects_Management_Studio.Domain.Entities;
@@ -67,7 +68,7 @@ namespace Projects_Management_Studio.App.Services
 
 
             // check if the user exists
-            if (await IsUserProjectMember(userId, projectId))
+            if (await _memberRepo.IsExistAsync(userId, projectId))
                 throw new Exception("User is already a member of the project.");
 
 
@@ -144,15 +145,15 @@ namespace Projects_Management_Studio.App.Services
 
         //
         //
-        public async Task<List<ProjectMember>> GetProjectMembersAsync(Guid userId, Guid projectId)
+        public async Task<List<GetMemberByProjectDto>> GetProjectMembersAsync(Guid userId, Guid projectId)
         {
             if (await _projectRepo.GetByIdAsync(projectId) is not Project project)
                 throw new Exception("Project not found.");
 
-            if (! await IsUserProjectMember(userId, projectId) && userId != project.OwnerId)
+            if (! await _memberRepo.IsExistAsync(userId, projectId) && userId != project.OwnerId)
                 throw new Exception("You are not a member of the project.");
 
-            return await _memberRepo.GetByProjectIdAsync(projectId);
+            return await _memberRepo.GetByProjectIdAsync(projectId, userId);
         }
 
 
@@ -211,19 +212,6 @@ namespace Projects_Management_Studio.App.Services
         }
 
 
-
-
-
-
-        //
-        //
-        //
-        async Task<bool> IsUserProjectMember(Guid userId, Guid projectId)
-        {
-            var members = await _memberRepo.GetByProjectIdAsync(projectId);
-            if (members == null) return false;
-
-            return members.Any(m => m.UserId == userId);
-        }
+        
     }
 }
