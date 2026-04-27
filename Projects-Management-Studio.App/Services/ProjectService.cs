@@ -46,6 +46,23 @@ namespace Projects_Management_Studio.App.Services
             return await _projectRepo.GetProjectsByUserIdAsyn(userId);
         }
 
+
+        public async Task DeleteAsync(Guid currentUserId, Guid projectId)
+        {
+
+            var project = await _projectRepo.GetByIdAsync(projectId);
+
+            if (project is null)
+                throw new Exception("project not found.");
+
+            if (currentUserId != project.OwnerId)
+                throw new Exception("you have no permission to delete this project.");
+
+            _projectRepo.Delete(project);
+            await _unitOfWork.SaveChangesAsync();   
+            
+        }
+
         
     }
 }
