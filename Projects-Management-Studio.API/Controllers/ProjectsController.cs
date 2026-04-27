@@ -27,7 +27,7 @@ namespace Projects_Management_Studio.API.Controllers
         public async Task<IActionResult> NewProject(AddNewProjectRequest request)
         {
             Guid OwnerId = currrentUser.UserId;
-            
+
             await projectService.AddNewProjectAsync(request.Name, request.Description, OwnerId);
 
             return Ok();
@@ -45,5 +45,18 @@ namespace Projects_Management_Studio.API.Controllers
 
             return Ok(projects);
         }
+
+        //
+        //
+        [HttpDelete("{projectId}")]
+        [Authorize()]
+        public async Task<IActionResult> DeleteProject(Guid projectId)
+        {
+            Guid userId = currrentUser.UserId;
+            await projectService.DeleteAsync(userId, projectId);
+
+            return Ok();
+        }
+
     }
 }
