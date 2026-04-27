@@ -100,8 +100,12 @@ namespace Projects_Management_Studio.App.Services
                                 ?? throw new Exception("project not found.");
 
             if (project.OwnerId != userId)
-                throw new Exception("you have no permision to assign task here.");
+            {
+                ProjectMember? currentMember = await _memberRepository.GetMemberByUserIdAndProjectIdAsync(userId, task.ProjectId);
 
+                if (currentMember is null || currentMember.Role != ProjectRole.Admin)
+                    throw new Exception("you have no permision to assign task here.");
+            }
 
             // check if the assigned user is a member of the project
             if (assignedToUserId is not null)
