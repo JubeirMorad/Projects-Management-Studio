@@ -64,8 +64,21 @@ namespace Projects_Management_Studio.App.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<List<TaskItem>?> GetTasksProjectAsync(Guid projectId)
+        public async Task<List<TaskItem>> GetTasksProjectAsync(Guid currentUserId, Guid projectId)
         {
+            Project? project = await _projectRepo.GetByIdAsync(projectId);
+
+            if (project is null)
+                throw new Exception("project not fount.");
+
+            if (currentUserId != project.OwnerId)
+            {
+                ProjectMember? member = await _memberRepository.GetMemberByUserIdAndProjectIdAsync(currentUserId, projectId);
+
+                if (member is null || member.Role != ProjectRole.Admin)
+                    throw new Exception("you do not have access to the tasks in this project.");
+            }
+
             return await _taskRepo.GetTasksByProjectIdAsync(projectId);
         }
 

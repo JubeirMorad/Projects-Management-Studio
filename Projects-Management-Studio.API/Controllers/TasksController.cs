@@ -54,12 +54,13 @@ namespace Projects_Management_Studio.API.Controllers
 
 
 
-        [HttpGet("get-project-tasks")]
+        [HttpGet("{projectId}/tasks")]
         //Roles = "Admin" later
-        public async Task<IActionResult> GetProjectTasks(GetProjectTasksRequest request)
+        public async Task<IActionResult> GetProjectTasks(Guid projectId)
         {
+            Guid userId = currrentUser.UserId;
 
-            var tasks = await taskService.GetTasksProjectAsync(request.ProjectId);
+            var tasks = await taskService.GetTasksProjectAsync(userId, projectId);
 
             return Ok(tasks);
         }
