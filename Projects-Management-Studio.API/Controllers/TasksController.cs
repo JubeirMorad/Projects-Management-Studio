@@ -41,7 +41,7 @@ namespace Projects_Management_Studio.API.Controllers
 
 
 
-        [HttpGet("get-my-tasks")]
+        [HttpGet("my-tasks")]
         public async Task<IActionResult> GetMyTasks()
         {
             var userId = currrentUser.UserId;

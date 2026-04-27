@@ -1,4 +1,5 @@
 
+using Projects_Management_Studio.App.DTOs.Projects;
 using Projects_Management_Studio.App.Interfaces.Repositories;
 using Projects_Management_Studio.App.Interfaces.Services;
 using Projects_Management_Studio.Domain.Entities;
@@ -41,7 +42,7 @@ namespace Projects_Management_Studio.App.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<List<Project>> GetMyProjectsAsync(Guid userId)
+        public async Task<List<GetProjectDto>> GetMyProjectsAsync(Guid userId)
         {
             return await _projectRepo.GetProjectsByUserIdAsyn(userId);
         }
