@@ -17,6 +17,8 @@ namespace Projects_Management_Studio.Infra.Repostories
             _context.Projects.Add(project);
         }
 
+
+
         public async Task<Project?> GetByIdAsync(Guid projectId)
         {
             return await _context.Projects.FirstOrDefaultAsync(p => p.Id == projectId);
@@ -27,8 +29,8 @@ namespace Projects_Management_Studio.Infra.Repostories
             return await _context.Projects.FirstOrDefaultAsync(p => p.Name == name);
         }
 
-        
-        
+
+
         public async Task<List<Project>> GetProjectsByUserIdAsyn(Guid userId)
         {
             return await _context.Projects.AsNoTracking().Where(
@@ -36,5 +38,14 @@ namespace Projects_Management_Studio.Infra.Repostories
                     p.Members.Any(m => m.UserId == userId)
             ).ToListAsync();
         }
+
+
+        public void Delete(Project project)
+        {
+            _context.Remove(project);
+        }
+
+        
+        
     }
 }

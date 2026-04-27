@@ -12,5 +12,6 @@ namespace Projects_Management_Studio.App.Interfaces.Repositories
         Task<Project?> GetByNameAsync(string name);
         Task<Project?> GetByIdAsync(Guid projectId);
         Task<List<Project>> GetProjectsByUserIdAsyn(Guid userId);
+        void Delete(Project project);
     }
 }
