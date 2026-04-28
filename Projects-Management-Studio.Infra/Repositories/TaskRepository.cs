@@ -1,5 +1,6 @@
 
 using Microsoft.EntityFrameworkCore;
+using Projects_Management_Studio.App.DTOs.Tasks;
 using Projects_Management_Studio.App.Interfaces.Repositories;
 using Projects_Management_Studio.Domain.Entities;
 using Projects_Management_Studio.Infra.Data;
@@ -22,11 +23,22 @@ namespace Projects_Management_Studio.Infra.Repostories
         }
 
         //
-        public async Task<List<TaskItem>> GetTasksByProjectIdAsync(Guid projectId)
+        public async Task<List<GetTaskByProjectDto>> GetTasksByProjectIdAsync(Guid projectId)
         {
             return await _context.Tasks
                         .AsNoTracking()
-                        .Where(t => t.ProjectId == projectId).ToListAsync();
+                        .Where(t => t.ProjectId == projectId)
+                        .Select(t => new GetTaskByProjectDto(
+                            t.Id,
+                            t.Title,
+                            t.Description,
+                            
+                            t.AssignedToUserId,
+                            t.AssignedToUser != null ? t.AssignedToUser.Username  : "Unassigned.",
+                            
+                            t.Status.ToString()
+                        ))
+                        .ToListAsync();
         }
 
         //
