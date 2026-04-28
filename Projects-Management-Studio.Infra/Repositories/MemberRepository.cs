@@ -51,6 +51,7 @@ namespace Projects_Management_Studio.Infra.Repositories
                             m.UserId,
                             m.User.Username,
                             m.Role.ToString(),
+                            m.User.Tasks.Count(t => t.ProjectId == projectId),
                             m.UserId == currentUserId
                         ))
                         .ToListAsync();

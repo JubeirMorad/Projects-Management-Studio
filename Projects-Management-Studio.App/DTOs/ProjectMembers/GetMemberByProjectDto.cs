@@ -11,6 +11,7 @@ namespace Projects_Management_Studio.App.DTOs.ProjectMembers
         Guid UserId,
         string UserName,
         string Role,
+        int TasksCount,
         bool isCurrentUser
     );
 }
