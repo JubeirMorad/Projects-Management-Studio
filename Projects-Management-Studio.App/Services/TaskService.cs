@@ -65,7 +65,7 @@ namespace Projects_Management_Studio.App.Services
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<List<GetTaskByProjectDto>> GetTasksProjectAsync(Guid currentUserId, Guid projectId)
+        public async Task<List<GetTaskByProjectDto>> GetProjectTasksAsync(Guid currentUserId, Guid projectId)
         {
             Project? project = await _projectRepo.GetByIdAsync(projectId);
 

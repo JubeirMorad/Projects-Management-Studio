@@ -9,7 +9,7 @@ namespace Projects_Management_Studio.App.Interfaces.Services
     {
         Task CreateTaskAsync(Guid userId, string title, string? description, Guid projectId, Guid? AssignedToUserId);
         Task<List<GetTaskByUserDto>> GetUserTasksAsync(Guid? userId);
-        Task<List<GetTaskByProjectDto>> GetTasksProjectAsync(Guid currentUserId ,Guid projectId);
+        Task<List<GetTaskByProjectDto>> GetProjectTasksAsync(Guid currentUserId ,Guid projectId);
 
         Task AssignTaskAsync(Guid userId, Guid taskId, Guid? assignedToUserId);
         Task UpdateTaskAsync(Guid userId, Guid taskId, string title, string? description);

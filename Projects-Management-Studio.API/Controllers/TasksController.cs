@@ -46,7 +46,7 @@ namespace Projects_Management_Studio.API.Controllers
         {
             var userId = currrentUser.UserId;
 
-            var tasks = await taskService.GetTasksUserAsync(userId);
+            var tasks = await taskService.GetUserTasksAsync(userId);
 
             return Ok(tasks);
         }
@@ -60,7 +60,7 @@ namespace Projects_Management_Studio.API.Controllers
         {
             Guid userId = currrentUser.UserId;
 
-            var tasks = await taskService.GetTasksProjectAsync(userId, projectId);
+            var tasks = await taskService.GetProjectTasksAsync(userId, projectId);
 
             return Ok(tasks);
         }
