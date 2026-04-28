@@ -37,7 +37,18 @@ namespace Projects_Management_Studio.API.Controllers
         }
 
 
+        //
+        [HttpGet("user/{userId:Guid}")]
+        // Admin only later
+        public async Task<IActionResult> GetByUser(Guid userId)
+        {
+            var result = await _memberService.GetUserMembersAsync(userId);
 
+            return Ok(result);
+        }
+
+
+        //
         [HttpGet("get-my-members")]
         public async Task<IActionResult> GetMyMembers()
         {
