@@ -13,7 +13,7 @@ namespace Projects_Management_Studio.App.Interfaces.Services
 
         Task<List<GetMemberByProjectDto>> GetProjectMembersAsync(Guid userId, Guid projectId);
 
-        Task<List<ProjectMember>> GetUserMembersAsync(Guid userId);
+        Task<List<GetMemberByUserDto>> GetUserMembersAsync(Guid userId);
 
         Task UpdateMemberAsync(Guid ownerId, Guid projectId, Guid userId, ProjectRole newRole);
 

@@ -9,7 +9,7 @@ namespace Projects_Management_Studio.App.Interfaces.Repositories
     {
         void Add(ProjectMember member); 
         Task<ProjectMember?> GetByIdAsync(Guid id);
-        Task<List<ProjectMember>> GetByUserIdAsync(Guid userId);
+        Task<List<GetMemberByUserDto>> GetByUserIdAsync(Guid userId);
         Task<List<GetMemberByProjectDto>> GetByProjectIdAsync(Guid projectId, Guid currentUserId);
 
         Task<ProjectMember?> GetMemberByUserIdAndProjectIdAsync(Guid userId, Guid projectId);

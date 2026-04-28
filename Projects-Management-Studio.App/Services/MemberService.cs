@@ -159,7 +159,7 @@ namespace Projects_Management_Studio.App.Services
 
         //
         //
-        public async Task<List<ProjectMember>> GetUserMembersAsync(Guid userId)
+        public async Task<List<GetMemberByUserDto>> GetUserMembersAsync(Guid userId)
         {
             return await _memberRepo.GetByUserIdAsync(userId);
         }
