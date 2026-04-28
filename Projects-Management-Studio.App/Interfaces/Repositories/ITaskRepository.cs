@@ -10,7 +10,7 @@ namespace Projects_Management_Studio.App.Interfaces.Repositories
     public interface ITaskRepository
     {
         void Add(TaskItem taskItem);
-        Task<List<TaskItem>> GetTasksByUserIdAsync(Guid? userId);
+        Task<List<GetTaskByUserDto>> GetTasksByUserIdAsync(Guid? userId);
         Task<List<GetTaskByProjectDto>> GetTasksByProjectIdAsync(Guid projectId);
         Task<List<TaskItem>> GetTasksByUserIdAndProjectIdAsync(Guid userId, Guid projectId);
         Task<TaskItem?> GetByIdAsync(Guid taskId);

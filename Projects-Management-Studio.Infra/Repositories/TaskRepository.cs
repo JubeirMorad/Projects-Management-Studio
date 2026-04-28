@@ -42,11 +42,21 @@ namespace Projects_Management_Studio.Infra.Repostories
         }
 
         //
-        public async Task<List<TaskItem>> GetTasksByUserIdAsync(Guid? userId)
+        public async Task<List<GetTaskByUserDto>> GetTasksByUserIdAsync(Guid? userId)
         {
             return await _context.Tasks
                         .AsNoTracking()
                         .Where(t => t.AssignedToUserId == userId)
+                        .Select(t => new GetTaskByUserDto(
+                            t.Id,
+                            t.Title,
+                            t.Description,
+
+                            t.ProjectId,
+                            t.Project.Name,
+                            
+                            t.Status.ToString()
+                        ))
                         .ToListAsync();
         }
 

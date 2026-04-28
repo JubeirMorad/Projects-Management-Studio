@@ -85,7 +85,7 @@ namespace Projects_Management_Studio.App.Services
 
 
         //
-        public async Task<List<TaskItem>?> GetTasksUserAsync(Guid? userId)
+        public async Task<List<GetTaskByUserDto>> GetUserTasksAsync(Guid? userId)
         {
             return await _taskRepo.GetTasksByUserIdAsync(userId);
         }
