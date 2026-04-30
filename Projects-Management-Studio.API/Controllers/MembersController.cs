@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi;
 using Projects_Management_Studio.API.Contracts.Members;
 using Projects_Management_Studio.App.Interfaces.Services;
+using Projects_Management_Studio.Domain.Entities;
 
 namespace Projects_Management_Studio.API.Controllers
 {
@@ -36,7 +37,18 @@ namespace Projects_Management_Studio.API.Controllers
         }
 
 
+        //
+        [HttpGet("user/{userId:Guid}")]
+        // Admin only later
+        public async Task<IActionResult> GetByUser(Guid userId)
+        {
+            var result = await _memberService.GetUserMembersAsync(userId);
 
+            return Ok(result);
+        }
+
+
+        //
         [HttpGet("get-my-members")]
         public async Task<IActionResult> GetMyMembers()
         {
@@ -47,14 +59,6 @@ namespace Projects_Management_Studio.API.Controllers
         }
 
 
-        [HttpGet("{memberId:Guid}")]
-        //admin only
-        public async Task<IActionResult> GetById(Guid memberId)
-        {
-            var result = await _memberService.GetMemberByIdAsync(memberId);
-
-            return Ok(result);
-        }
 
         [HttpPost("{projectId}")]
         //admin only
@@ -67,18 +71,28 @@ namespace Projects_Management_Studio.API.Controllers
             return Ok();
         }
 
-        [HttpPut("{memberId:Guid}")]
+        [HttpPatch("{projectId:Guid}/{userId:Guid}/role")]
         // admin only
-        public async Task<IActionResult> UpdateMember(Guid memberId, UpdateMemberRequest request)
+        public async Task<IActionResult> UpdateMemberRole(Guid projectId , Guid userId , UpdateMemberRequest request)
         {
-            Guid userId = _currentUser.UserId;
+            Guid currentUserId = _currentUser.UserId;
 
-            await _memberService.UpdateMemberAsync(userId, memberId, request.ProjectId, request.UserId, request.Role);
+            await _memberService.UpdateMemberAsync(currentUserId, projectId, userId, request.Role);
 
             return Ok();
         }
 
 
+
+        [HttpDelete("{ProjectId:Guid}")]
+        // admin only
+        public async Task<IActionResult> DeleteMember(Guid ProjectId, DeleteMemberRequest request)
+        {
+            Guid currentUserId = _currentUser.UserId;
+            await _memberService.DeleteMemberAsync(currentUserId, request.UserId, ProjectId);
+
+            return Ok();
+        }
 
     }
 }

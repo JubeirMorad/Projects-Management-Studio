@@ -1,4 +1,5 @@
 
+using Projects_Management_Studio.App.DTOs.Projects;
 using Projects_Management_Studio.Domain.Entities;
 
 namespace Projects_Management_Studio.App.Interfaces.Services
@@ -7,6 +8,7 @@ namespace Projects_Management_Studio.App.Interfaces.Services
     {
         Task AddNewProjectAsync(string name, string? description, Guid ownerId);
 
-        Task<List<Project>?> GetProjectsByOwnerIdAsync(Guid ownerId);
+        Task<List<GetProjectDto>> GetMyProjectsAsync(Guid userId);
+        Task DeleteAsync(Guid currentUserId , Guid projectId);
     }
 }

@@ -1,3 +1,4 @@
+using Projects_Management_Studio.App.DTOs.Tasks;
 using Projects_Management_Studio.App.Interfaces.Repositories;
 using Projects_Management_Studio.App.Interfaces.Services;
 using Projects_Management_Studio.Domain.Entities;
@@ -10,24 +11,28 @@ namespace Projects_Management_Studio.App.Services
         private readonly ITaskRepository _taskRepo;
         private readonly IUserRepository _userRepo;
         private readonly IProjectRepository _projectRepo;
+        private readonly IMemberRepository _memberRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
         //
-        public TaskService(ITaskRepository taskRepository, IUserRepository userRepository, IProjectRepository projectRepository)
+        public TaskService(ITaskRepository taskRepository, IUserRepository userRepository, IProjectRepository projectRepository, IMemberRepository memberRepository, IUnitOfWork unitOfWork)
         {
             _taskRepo = taskRepository;
             _projectRepo = projectRepository;
             _userRepo = userRepository;
+            _memberRepository = memberRepository;
+            _unitOfWork = unitOfWork;
         }
 
 
         //
-        public async Task CreateTaskAsync(Guid userId, string title, string? description, Guid projectId, Guid? AssignedToUserId)
+        public async Task CreateTaskAsync(Guid userId, string title, string? description, Guid projectId, Guid? assignedToUserId)
         {
 
             // check user // alow null
-            if (AssignedToUserId is not null)
+            if (assignedToUserId is not null)
             {
-                if (await _userRepo.GetUserByIdAsync(AssignedToUserId.Value) is null)
+                if (await _userRepo.GetUserByIdAsync(assignedToUserId.Value) is null)
                     throw new Exception("user not found.");
             }
 
@@ -38,26 +43,49 @@ namespace Projects_Management_Studio.App.Services
             if (project.OwnerId != userId)
                 throw new Exception("you have no permision to add task here.");
 
+            // check if the assigned user is a member of the project
+            if (assignedToUserId is not null)
+            {
+                bool isMember = await _memberRepository.IsExistAsync(project.Id, assignedToUserId.Value);
+                
+                if (!isMember)
+                    throw new Exception("user is not a member of the project.");
+            }
+
             TaskItem task = new()
             {
                 Id = Guid.NewGuid(),
                 Title = title,
                 Description = description,
                 ProjectId = projectId,
-                AssignedToUserId = AssignedToUserId
+                AssignedToUserId = assignedToUserId
             };
 
-            await _taskRepo.AddAsync(task);
+            _taskRepo.Add(task);
+            await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<List<TaskItem>?> GetTasksProjectAsync(Guid projectId)
+        public async Task<List<GetTaskByProjectDto>> GetProjectTasksAsync(Guid currentUserId, Guid projectId)
         {
+            Project? project = await _projectRepo.GetByIdAsync(projectId);
+
+            if (project is null)
+                throw new Exception("project not fount.");
+
+            if (currentUserId != project.OwnerId)
+            {
+                ProjectMember? member = await _memberRepository.GetMemberByUserIdAndProjectIdAsync(currentUserId, projectId);
+
+                if (member is null || member.Role != ProjectRole.Admin)
+                    throw new Exception("you do not have access to the tasks in this project.");
+            }
+
             return await _taskRepo.GetTasksByProjectIdAsync(projectId);
         }
 
 
         //
-        public async Task<List<TaskItem>?> GetTasksUserAsync(Guid? userId)
+        public async Task<List<GetTaskByUserDto>> GetUserTasksAsync(Guid? userId)
         {
             return await _taskRepo.GetTasksByUserIdAsync(userId);
         }
@@ -66,13 +94,6 @@ namespace Projects_Management_Studio.App.Services
         //
         public async Task AssignTaskAsync(Guid userId, Guid taskId, Guid? assignedToUserId)
         {
-            // check user // alow null
-            if (assignedToUserId is not null)
-            {
-                if (await _userRepo.GetUserByIdAsync(assignedToUserId.Value) is null)
-                    throw new Exception("user not found.");
-            }
-
             var task = await _taskRepo.GetByIdAsync(taskId)
                                 ?? throw new Exception("task not found.");
 
@@ -80,11 +101,27 @@ namespace Projects_Management_Studio.App.Services
                                 ?? throw new Exception("project not found.");
 
             if (project.OwnerId != userId)
-                throw new Exception("you have no permision to assign task here.");
+            {
+                ProjectMember? currentMember = await _memberRepository.GetMemberByUserIdAndProjectIdAsync(userId, task.ProjectId);
+
+                if (currentMember is null || currentMember.Role != ProjectRole.Admin)
+                    throw new Exception("you have no permision to assign task here.");
+            }
+
+            // check if the assigned user is a member of the project
+            if (assignedToUserId is not null)
+            {
+                bool isMember = await _memberRepository.IsExistAsync(project.Id, assignedToUserId.Value);
+
+                if (isMember == false)
+                    throw new Exception("user is not a member of the project.");
+            }
+
 
             task.AssignedToUserId = assignedToUserId;
 
-            await _taskRepo.UpdateAsync(task);
+            _taskRepo.Update(task);
+            await _unitOfWork.SaveChangesAsync();
         }
 
 
@@ -103,7 +140,8 @@ namespace Projects_Management_Studio.App.Services
             task.Title = title;
             task.Description = description;
 
-            await _taskRepo.UpdateAsync(task);
+            _taskRepo.Update(task);
+            await _unitOfWork.SaveChangesAsync();
         }
 
 
@@ -120,7 +158,8 @@ namespace Projects_Management_Studio.App.Services
 
             task.Status = status;
 
-            await _taskRepo.UpdateAsync(task);
+            _taskRepo.Update(task);
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

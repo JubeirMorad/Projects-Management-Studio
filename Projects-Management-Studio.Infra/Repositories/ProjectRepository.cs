@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Projects_Management_Studio.App.DTOs.Projects;
 using Projects_Management_Studio.App.Interfaces.Repositories;
 using Projects_Management_Studio.Domain.Entities;
 using Projects_Management_Studio.Infra.Data;
@@ -12,11 +13,12 @@ namespace Projects_Management_Studio.Infra.Repostories
         {
             _context = appDbContext;
         }
-        public async Task AddAsync(Project project)
+        public void Add(Project project)
         {
-            await _context.Projects.AddAsync(project);
-            _context.SaveChanges();
+            _context.Projects.Add(project);
         }
+
+
 
         public async Task<Project?> GetByIdAsync(Guid projectId)
         {
@@ -28,12 +30,33 @@ namespace Projects_Management_Studio.Infra.Repostories
             return await _context.Projects.FirstOrDefaultAsync(p => p.Name == name);
         }
 
-        public async Task<List<Project>?> GetByOwnerIdAsync(Guid ownerId)
+
+
+        public async Task<List<GetProjectDto>> GetProjectsByUserIdAsyn(Guid userId)
         {
-            List<Project>? projects = await _context.Projects.Where(p => p.OwnerId == ownerId)
-                                                             .ToListAsync();
-            
-            return projects;
+            return await _context.Projects.AsNoTracking().Where(
+                    p => p.OwnerId == userId ||
+                    p.Members.Any(m => m.UserId == userId)
+                    )
+                    .Select(
+                        p => new GetProjectDto (
+                            p.Id,
+                            p.Name,
+                            p.Description,
+                            p.OwnerId == userId,
+                            p.Members.Count()
+                        )
+                    )
+                    .ToListAsync();
         }
+
+
+        public void Delete(Project project)
+        {
+            _context.Remove(project);
+        }
+
+        
+        
     }
 }

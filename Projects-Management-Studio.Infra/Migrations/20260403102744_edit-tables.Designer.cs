@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Projects_Management_Studio.Infra.Data;
 
 #nullable disable
-
+#pragma warning disable CS8981
 namespace Projects_Management_Studio.Infra.Migrations
 {
     [DbContext(typeof(AppDbContext))]

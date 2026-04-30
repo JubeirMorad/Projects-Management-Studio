@@ -2,13 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Projects_Management_Studio.Domain.Enums;
 
 namespace Projects_Management_Studio.API.Contracts.Members
 {
-    public record AddMemberRequest
+    public record DeleteMemberRequest
     (
-        Guid UserId,
-        ProjectRole Role = ProjectRole.Member
+        Guid UserId
     );
 }

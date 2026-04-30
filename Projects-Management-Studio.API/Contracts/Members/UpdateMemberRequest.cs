@@ -1,10 +1,10 @@
 
+using Projects_Management_Studio.Domain.Enums;
+
 namespace Projects_Management_Studio.API.Contracts.Members
 {
     public record UpdateMemberRequest
     (
-        Guid ProjectId,
-        Guid UserId,
-        string Role
+        ProjectRole Role = ProjectRole.Member
     );
 }

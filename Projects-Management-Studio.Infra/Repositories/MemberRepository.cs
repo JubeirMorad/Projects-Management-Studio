@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Projects_Management_Studio.App.DTOs.ProjectMembers;
+using Projects_Management_Studio.App.DTOs.Projects;
 using Projects_Management_Studio.App.Interfaces.Repositories;
 using Projects_Management_Studio.Domain.Entities;
 using Projects_Management_Studio.Infra.Data;
@@ -15,21 +17,19 @@ namespace Projects_Management_Studio.Infra.Repositories
         }
 
 
-        //
-        //
-        public async Task AddAsync(ProjectMember member)
+
+
+        public void Add(ProjectMember member)
         {
-            await _context.ProjectMembers.AddAsync(member);
-            await _context.SaveChangesAsync();
+            _context.ProjectMembers.Add(member);
         }
 
 
         //
         //
-        public async Task DeleteAsync(ProjectMember member)
+        public void Delete(ProjectMember member)
         {
             _context.ProjectMembers.Remove(member);
-            await _context.SaveChangesAsync();
         }
 
 
@@ -43,16 +43,37 @@ namespace Projects_Management_Studio.Infra.Repositories
 
         //
         //
-        public async Task<List<ProjectMember>?> GetByProjectIdAsync(Guid projectId)
+        public async Task<List<GetMemberByProjectDto>> GetByProjectIdAsync(Guid projectId, Guid currentUserId)
         {
-            return await _context.ProjectMembers.Where(m => m.ProjectId == projectId).ToListAsync();
+            return await _context.ProjectMembers.AsNoTracking()
+                        .Where(m => m.ProjectId == projectId)
+                        .Select( m => new GetMemberByProjectDto(
+                            m.UserId,
+                            m.User.Username,
+                            m.Role.ToString(),
+                            m.User.Tasks.Count(t => t.ProjectId == projectId),
+                            m.UserId == currentUserId
+                        ))
+                        .ToListAsync();
         }
 
         //
         //
-        public async Task<List<ProjectMember>?> GetByUserIdAsync(Guid userId)
+        public async Task<List<GetMemberByUserDto>> GetByUserIdAsync(Guid userId)
         {
-            return await _context.ProjectMembers.Where(m => m.UserId == userId).ToListAsync();
+            return await _context.ProjectMembers
+                        .AsNoTracking()
+                        .Where(m => m.UserId == userId)
+                        .Select(m => new GetMemberByUserDto(
+                            m.ProjectId,
+                            m.Project.Name,
+                            m.Project.Description,
+                            m.User.Tasks.Count(t => t.ProjectId == m.ProjectId),
+                            m.Role.ToString(),
+                            m.Project.OwnerId,
+                            m.Project.Owner.Username
+                        ))
+                        .ToListAsync();
         }
 
 
@@ -60,7 +81,7 @@ namespace Projects_Management_Studio.Infra.Repositories
         //
         public async Task<ProjectMember?> GetMemberByUserIdAndProjectIdAsync(Guid userId, Guid projectId)
         {
-            return await _context.ProjectMembers.FirstOrDefaultAsync(m => m.UserId == userId && m.ProjectId == projectId);
+            return await _context.ProjectMembers.AsNoTracking().FirstOrDefaultAsync(m => m.UserId == userId && m.ProjectId == projectId);
         }
 
 
@@ -68,16 +89,14 @@ namespace Projects_Management_Studio.Infra.Repositories
         //
         public async Task<bool> IsExistAsync(Guid userId, Guid projectId)
         {
-            return await _context.ProjectMembers.AnyAsync(m => m.UserId == userId && m.ProjectId == projectId);
+            return await _context.ProjectMembers.AsNoTracking().AnyAsync(m => m.UserId == userId && m.ProjectId == projectId);
         }
 
         //
         //
-        public async Task UpdateAsync(ProjectMember member)
+        public void Update(ProjectMember member)
         {
             _context.ProjectMembers.Update(member);
-
-            await _context.SaveChangesAsync();
         }
 
     }

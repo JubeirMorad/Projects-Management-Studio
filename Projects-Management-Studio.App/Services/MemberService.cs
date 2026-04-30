@@ -1,6 +1,8 @@
+using Projects_Management_Studio.App.DTOs.ProjectMembers;
 using Projects_Management_Studio.App.Interfaces.Repositories;
 using Projects_Management_Studio.App.Interfaces.Services;
 using Projects_Management_Studio.Domain.Entities;
+using Projects_Management_Studio.Domain.Enums;
 
 namespace Projects_Management_Studio.App.Services
 {
@@ -9,36 +11,70 @@ namespace Projects_Management_Studio.App.Services
         private readonly IMemberRepository _memberRepo;
         private readonly IProjectRepository _projectRepo;
         private readonly IUserRepository _userRepo;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly ITaskRepository _taskRepo;
 
-        public MemberService(IMemberRepository memberRepository, IProjectRepository projectRepository, IUserRepository userRepository)
+        public MemberService(IMemberRepository memberRepository, IProjectRepository projectRepository, IUserRepository userRepository, IUnitOfWork unitOfWork, ITaskRepository taskRepository)
         {
             _memberRepo = memberRepository;
             _projectRepo = projectRepository;
             _userRepo = userRepository;
+            _unitOfWork = unitOfWork;
+            _taskRepo = taskRepository;
         }
 
-        public async Task CreateMemberAsync(Guid currentUserId, Guid projectId, Guid userId, string role) // current user must be owner of the project
+        public async Task CreateMemberAsync(Guid currentUserId, Guid projectId, Guid userId, ProjectRole role) // current user must be owner of the project
         {
+
+            // check for valid role
+            if(!Enum.IsDefined(typeof(ProjectRole), role))
+                throw new Exception("Invalid project role.");
+
+
 
             if ( await _projectRepo.GetByIdAsync(projectId) is not Project project)
                 throw new Exception("Project does not exist.");
 
 
+            // note : The owner is not considered a member of the project. => if current user is owner, currentMember = null 
+            var currentMember = await _memberRepo.GetMemberByUserIdAndProjectIdAsync(currentUserId, projectId); 
+
+
+            // check if the current user is the owner of the project or admin
             if (project.OwnerId != currentUserId)
-                throw new UnauthorizedAccessException("Only the project owner can add members.");
+            {
+
+                if (currentMember is null)
+                    throw new Exception("You are not a member of the project.");
+
+                if (currentMember.Role != ProjectRole.Admin)
+                        throw new Exception("Only the project owner and project admin can add members.");
+            }
 
 
-            if (await _userRepo.GetUserByIdAsync(currentUserId) is null )
-                throw new Exception("User does not exist.");
+            // check if the user try to add project owner as member
+            if (project.OwnerId == userId)
+                throw new Exception("The project owner is already a member of the project.");
 
 
+            // check if the user try to add him self as member
             if ( userId == currentUserId)
                 throw new Exception("connot set your self as member");
 
 
-            if (await IsUserProjectMember(userId, projectId))
+            // check if the user exists
+            if (await _userRepo.GetUserByIdAsync(userId) is null)
+                throw new Exception("User does not exist.");
+
+
+            // check if the user exists
+            if (await _memberRepo.IsExistAsync(userId, projectId))
                 throw new Exception("User is already a member of the project.");
 
+
+            // check if member is admin and current user is also admin, only owner can assign admin role
+            if (role == ProjectRole.Admin && currentMember?.Role == ProjectRole.Admin)
+                throw new Exception("Only the project owner can assign admin role.");
 
 
             var member = new ProjectMember()
@@ -49,33 +85,74 @@ namespace Projects_Management_Studio.App.Services
                 Role = role 
             };
 
-            await _memberRepo.AddAsync(member);
+            _memberRepo.Add(member);
+            await _unitOfWork.SaveChangesAsync();
             
         }
 
 
+
         //
         //
-        public async Task<ProjectMember?> GetMemberByIdAsync(Guid memberId)
+        //
+        public async Task DeleteMemberAsync(Guid currentUserId, Guid userId, Guid projectId)
         {
-            return await _memberRepo.GetByIdAsync(memberId);
+            ProjectMember member =  await _memberRepo.GetMemberByUserIdAndProjectIdAsync(userId, projectId) ??
+                throw new Exception("Project member not found.");
+
+
+            // check if the project exists
+            Project project = await _projectRepo.GetByIdAsync(projectId) ??
+                throw new Exception("Project not found.");
+
+
+
+            // check if the user exists
+
+            User user = await _userRepo.GetUserByIdAsync(userId) ??
+                throw new Exception("User not found.");
+
+
+            // check if the current user is the owner of the project
+            if (currentUserId != project.OwnerId)
+                throw new Exception("Only the project owner can delete members.");
+
+            if (member.UserId == currentUserId)
+                throw new Exception("You cannot remove yourself from the project.");
+
+
+            // update tasks 
+            var tasks = await _taskRepo.GetTasksByUserIdAndProjectIdAsync(userId, projectId);
+
+            foreach(TaskItem task in tasks)
+            {
+                task.AssignedToUserId = null;
+            }
+
+            _memberRepo.Delete(member);
+            _taskRepo.UpdateRange(tasks);
+            await _unitOfWork.SaveChangesAsync();
+        }
+
+
+
+        //
+        //
+        public async Task<List<GetMemberByProjectDto>> GetProjectMembersAsync(Guid userId, Guid projectId)
+        {
+            if (await _projectRepo.GetByIdAsync(projectId) is not Project project)
+                throw new Exception("Project not found.");
+
+            if (! await _memberRepo.IsExistAsync(userId, projectId) && userId != project.OwnerId)
+                throw new Exception("You are not a member of the project.");
+
+            return await _memberRepo.GetByProjectIdAsync(projectId, userId);
         }
 
 
         //
         //
-        public async Task<List<ProjectMember>?> GetProjectMembersAsync(Guid userId, Guid projectId)
-        {
-            if (! await IsUserProjectMember(userId, projectId))
-                throw new UnauthorizedAccessException("You are not a member of the project.");
-
-            return await _memberRepo.GetByProjectIdAsync(projectId);
-        }
-
-
-        //
-        //
-        public async Task<List<ProjectMember>?> GetUserMembersAsync(Guid userId)
+        public async Task<List<GetMemberByUserDto>> GetUserMembersAsync(Guid userId)
         {
             return await _memberRepo.GetByUserIdAsync(userId);
         }
@@ -83,10 +160,15 @@ namespace Projects_Management_Studio.App.Services
 
         //
         //
-        public async Task UpdateMemberAsync(Guid ownerId, Guid memberId, Guid projectId, Guid userId, string role)
+        public async Task UpdateMemberAsync(Guid ownerId, Guid projectId, Guid userId, ProjectRole newRole)
         {
+            
+            // check for valid role
+            if(!Enum.IsDefined(typeof(ProjectRole), newRole))
+                throw new Exception("Invalid project role.");
 
-            User? user = await _userRepo.GetUserByIdAsync(ownerId);
+
+            User? user = await _userRepo.GetUserByIdAsync(userId);
 
             if (user is null)
                 throw new Exception("user not found.");
@@ -97,46 +179,32 @@ namespace Projects_Management_Studio.App.Services
             if (project is null)
                 throw new Exception("project not found.");
 
-            if (userId != project.OwnerId)
+            if (project.OwnerId == userId)
+                throw new Exception("cannot update role of the project owner.");
+
+            // check if the current user is the owner of the project
+            if (ownerId != project.OwnerId)
                 throw new Exception("you have no permmision to update this member.");
 
-            ProjectMember? member = await _memberRepo.GetByIdAsync(memberId);
+            ProjectMember? member = await _memberRepo.GetMemberByUserIdAndProjectIdAsync(userId, projectId);
 
+            // check if the member exists
             if (member is null)
                 throw new Exception("project member not found.");
 
-
             
-            if (member.ProjectId == projectId && member.UserId == userId && member.Role == role)
+            // check if role is the same
+            if (member.Role == newRole)
                 return;
 
-
-            // update project id
-            member.ProjectId = projectId;
-
-            // update user id
-            member.UserId = userId;
-
             //update role
-            member.Role = role;
+            member.Role = newRole;
 
-            await _memberRepo.UpdateAsync(member);
+            _memberRepo.Update(member);
+            await _unitOfWork.SaveChangesAsync();
         }
 
 
-
-
-
-
-        //
-        //
-        //
-        async Task<bool> IsUserProjectMember(Guid userId, Guid projectId)
-        {
-            var members = await _memberRepo.GetByProjectIdAsync(projectId);
-            if (members == null) return false;
-
-            return members.Any(m => m.UserId == userId);
-        }
+        
     }
 }
