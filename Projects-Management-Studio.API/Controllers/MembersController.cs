@@ -59,15 +59,6 @@ namespace Projects_Management_Studio.API.Controllers
         }
 
 
-        [HttpGet("{memberId:Guid}")]
-        //admin only
-        public async Task<IActionResult> GetById(Guid memberId)
-        {
-            var result = await _memberService.GetMemberByIdAsync(memberId);
-
-            return Ok(result);
-        }
-
 
         [HttpPost("{projectId}")]
         //admin only

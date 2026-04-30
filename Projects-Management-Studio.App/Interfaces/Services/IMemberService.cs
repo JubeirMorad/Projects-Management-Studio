@@ -9,8 +9,6 @@ namespace Projects_Management_Studio.App.Interfaces.Services
 
         Task CreateMemberAsync(Guid currentUserId, Guid projectId, Guid userId, ProjectRole Role); // current user must be owner of the project
 
-        Task<ProjectMember?> GetMemberByIdAsync(Guid memberId);
-
         Task<List<GetMemberByProjectDto>> GetProjectMembersAsync(Guid userId, Guid projectId);
 
         Task<List<GetMemberByUserDto>> GetUserMembersAsync(Guid userId);

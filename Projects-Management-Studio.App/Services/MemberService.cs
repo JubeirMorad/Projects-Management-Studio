@@ -135,13 +135,6 @@ namespace Projects_Management_Studio.App.Services
         }
 
 
-        //
-        //
-        public async Task<ProjectMember?> GetMemberByIdAsync(Guid memberId)
-        {
-            return await _memberRepo.GetByIdAsync(memberId);
-        }
-
 
         //
         //
