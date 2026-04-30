@@ -8,5 +8,6 @@ Projects-Management-Studio.App/obj/
 Projects-Management-Studio.App/bin/
 Projects-Management-Studio.Infra/obj/
 Projects-Management-Studio.Infra/bin/
-
+Tests/bin
+Tests/obj
 .vscode

@@ -3,4 +3,5 @@
   <Project Path="Projects-Management-Studio.App/Projects-Management-Studio.App.csproj" />
   <Project Path="Projects-Management-Studio.Domain/Projects-Management-Studio.Domain.csproj" />
   <Project Path="Projects-Management-Studio.Infra/Projects-Management-Studio.Infra.csproj" />
+  <Project Path="Tests/Tests.csproj" />
 </Solution>
