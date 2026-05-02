@@ -165,5 +165,60 @@ namespace Tests.Services
         }
 
         
+        //
+        //
+
+        [Fact]
+        public async Task DeleteMemberAsync_NonOwnerCannotDeleteMember()
+        {
+                // Arrange 
+    
+                var memberRepo = new Mock<IMemberRepository>();
+                var projectRepo = new Mock<IProjectRepository>();
+                var userRepo = new Mock<IUserRepository>();
+                var taskRepo = new Mock<ITaskRepository>();
+                var unitOfWork = new Mock<IUnitOfWork>();
+    
+                Guid currentUserId = Guid.NewGuid();
+                Guid userIdToDelete = Guid.NewGuid();
+                Guid projectId = Guid.NewGuid();
+    
+                Project project = new Project { Id = projectId, OwnerId = Guid.NewGuid() };
+    
+                ProjectMember memberToDelete = new ProjectMember
+                {
+                    Id = Guid.NewGuid(),
+                    UserId = userIdToDelete,
+                    ProjectId = projectId,
+                    Role = ProjectRole.Member
+                };
+                User user = new()
+                {
+                    Id = userIdToDelete,
+                    Username = "User To Delete"
+                };
+
+                //
+                // setup mocks
+
+                projectRepo.Setup(repo => repo.GetByIdAsync(projectId)).ReturnsAsync(project);
+                userRepo.Setup(repo => repo.GetUserByIdAsync(userIdToDelete)).ReturnsAsync(user);
+                memberRepo.Setup(repo => repo.GetMemberByUserIdAndProjectIdAsync(userIdToDelete, projectId)).ReturnsAsync(memberToDelete);
+
+                var memberService = new MemberService(
+                    memberRepo.Object,
+                    projectRepo.Object,
+                    userRepo.Object,
+                    unitOfWork.Object,
+                    taskRepo.Object
+                );
+
+                // Act
+                Exception exception = await Assert.ThrowsAsync<Exception>(() =>
+                                        memberService.DeleteMemberAsync(currentUserId, userIdToDelete, projectId));
+
+                // Assert
+                Assert.Equal("Only the project owner can delete members.", exception.Message);
+        }
     }
 }
