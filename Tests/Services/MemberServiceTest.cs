@@ -94,7 +94,76 @@ namespace Tests.Services
         }   
 
 
+        //
+        //
+        //
+
+        [Fact]
+        public async Task DeleteMemberAsync_UserCannotDeleteHimself()
+        {
+            // Arrange 
+
+            var memberRepo = new Mock<IMemberRepository>();
+            var projectRepo = new Mock<IProjectRepository>();
+            var userRepo = new Mock<IUserRepository>();
+            var taskRepo = new Mock<ITaskRepository>();
+            var unitOfWork = new Mock<IUnitOfWork>();
+
+            Guid currentUserId = Guid.NewGuid();
+            Guid projectId = Guid.NewGuid();
+
+            Project project = new Project { Id = projectId, OwnerId = currentUserId };
+            
+            ProjectMember memberToDelete = new ProjectMember
+            {
+                Id = Guid.NewGuid(),
+                UserId = currentUserId,
+                ProjectId = projectId,
+                Role = ProjectRole.Member
+            };
+
+            List<TaskItem> tasks = new List<TaskItem>
+            {
+                new TaskItem { Id = Guid.NewGuid(), Title = "title 1" , AssignedToUserId = currentUserId, ProjectId = projectId },
+                new TaskItem { Id = Guid.NewGuid(), Title = "title 2", AssignedToUserId = currentUserId, ProjectId = projectId }
+            };  
+
+            User user = new User { Id = currentUserId, Username = "Current User" };
 
 
+            //
+            //
+            // Setup mocks
+
+            memberRepo.Setup(repo => repo.GetMemberByUserIdAndProjectIdAsync(currentUserId, projectId)).ReturnsAsync(memberToDelete);
+            
+            projectRepo.Setup(repo => repo.GetByIdAsync(projectId)).ReturnsAsync(project);
+
+            userRepo.Setup(repo => repo.GetUserByIdAsync(currentUserId)).ReturnsAsync(user);
+
+            taskRepo.Setup(repo => repo.GetTasksByUserIdAndProjectIdAsync(currentUserId, projectId)).ReturnsAsync(tasks);
+
+            var memberService = new MemberService(
+                memberRepo.Object,
+                projectRepo.Object,
+                userRepo.Object,
+                unitOfWork.Object,
+                taskRepo.Object
+            );
+
+
+            var exception = await Assert.ThrowsAsync<Exception>(() =>
+                                        memberService.DeleteMemberAsync(currentUserId, currentUserId, projectId));
+
+
+            //
+            // Assert
+            Assert.Equal("You cannot remove yourself from the project.",exception.Message);
+
+
+            memberRepo.Verify(x => x.Delete(It.IsAny<ProjectMember>()),Times.Never);
+        }
+
+        
     }
 }
