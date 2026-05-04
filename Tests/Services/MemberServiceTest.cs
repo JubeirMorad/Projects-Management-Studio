@@ -221,5 +221,69 @@ namespace Tests.Services
                 // Assert
                 Assert.Equal("Only the project owner can delete members.", exception.Message);
         }
+    
+    
+
+        //
+        //
+        //
+        [Fact]
+        public async Task CreateMemberAsync_OwnerCanAddMember()
+        {
+            //
+            //
+            // Arrange
+            Mock<IMemberRepository> memberRepo = new Mock<IMemberRepository>();
+            Mock<IUserRepository> userRepo = new Mock<IUserRepository>();
+            Mock<IProjectRepository> projectRepo = new Mock<IProjectRepository>();
+            Mock<ITaskRepository> taskRepo = new Mock<ITaskRepository>();
+            Mock<IUnitOfWork> unitOfWork = new Mock<IUnitOfWork>();
+
+            Guid currentUserId = Guid.NewGuid();
+            Guid userId = Guid.NewGuid();
+            Guid projectId = Guid.NewGuid();
+
+            User user = new ()
+            {
+                Id = userId,
+                Username = "New User"  
+            };
+
+            Project project = new()
+            {
+                Id = projectId,
+                OwnerId = currentUserId,
+                Name = "Project 1",
+                Description = "Description 1"
+            };
+
+
+            //
+            //
+            // Setup mocks
+            userRepo.Setup( repo => repo.GetUserByIdAsync(userId)).ReturnsAsync(user);
+            projectRepo.Setup(repo => repo.GetByIdAsync(projectId)).ReturnsAsync(project);
+
+            var memberService = new MemberService(
+                memberRepo.Object,
+                projectRepo.Object,
+                userRepo.Object,
+                unitOfWork.Object,
+                taskRepo.Object
+            );
+
+            
+            //
+            // Act
+            await memberService.CreateMemberAsync(currentUserId, projectId, userId, ProjectRole.Member);
+
+            //
+            // Assert
+            memberRepo.Verify(repo => repo.Add(It.IsAny<ProjectMember>()), Times.Once);
+            memberRepo.Verify(repo => repo.IsExistAsync(userId, projectId), Times.Once);
+            unitOfWork.Verify(u => u.SaveChangesAsync(), Times.Once);
+
+        }
+    
     }
 }
