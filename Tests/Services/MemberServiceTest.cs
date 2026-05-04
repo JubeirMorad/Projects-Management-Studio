@@ -91,7 +91,7 @@ namespace Tests.Services
             Assert.Null(tasks[1].AssignedToUserId);
 
 
-        }   
+        }
 
 
 
@@ -114,7 +114,7 @@ namespace Tests.Services
             Guid projectId = Guid.NewGuid();
 
             Project project = new Project { Id = projectId, OwnerId = currentUserId };
-            
+
             ProjectMember memberToDelete = new ProjectMember
             {
                 Id = Guid.NewGuid(),
@@ -127,7 +127,7 @@ namespace Tests.Services
             {
                 new TaskItem { Id = Guid.NewGuid(), Title = "title 1" , AssignedToUserId = currentUserId, ProjectId = projectId },
                 new TaskItem { Id = Guid.NewGuid(), Title = "title 2", AssignedToUserId = currentUserId, ProjectId = projectId }
-            };  
+            };
 
             User user = new User { Id = currentUserId, Username = "Current User" };
 
@@ -137,7 +137,7 @@ namespace Tests.Services
             // Setup mocks
 
             memberRepo.Setup(repo => repo.GetMemberByUserIdAndProjectIdAsync(currentUserId, projectId)).ReturnsAsync(memberToDelete);
-            
+
             projectRepo.Setup(repo => repo.GetByIdAsync(projectId)).ReturnsAsync(project);
 
             userRepo.Setup(repo => repo.GetUserByIdAsync(currentUserId)).ReturnsAsync(user);
@@ -159,10 +159,10 @@ namespace Tests.Services
 
             //
             // Assert
-            Assert.Equal("You cannot remove yourself from the project.",exception.Message);
+            Assert.Equal("You cannot remove yourself from the project.", exception.Message);
 
 
-            memberRepo.Verify(x => x.Delete(It.IsAny<ProjectMember>()),Times.Never);
+            memberRepo.Verify(x => x.Delete(It.IsAny<ProjectMember>()), Times.Never);
         }
 
         
@@ -172,54 +172,54 @@ namespace Tests.Services
         [Fact]
         public async Task DeleteMemberAsync_NonOwnerCannotDeleteMember()
         {
-                // Arrange 
-    
-                var memberRepo = new Mock<IMemberRepository>();
-                var projectRepo = new Mock<IProjectRepository>();
-                var userRepo = new Mock<IUserRepository>();
-                var taskRepo = new Mock<ITaskRepository>();
-                var unitOfWork = new Mock<IUnitOfWork>();
-    
-                Guid currentUserId = Guid.NewGuid();
-                Guid userIdToDelete = Guid.NewGuid();
-                Guid projectId = Guid.NewGuid();
-    
-                Project project = new Project { Id = projectId, OwnerId = Guid.NewGuid() };
-    
-                ProjectMember memberToDelete = new ProjectMember
-                {
-                    Id = Guid.NewGuid(),
-                    UserId = userIdToDelete,
-                    ProjectId = projectId,
-                    Role = ProjectRole.Member
-                };
-                User user = new()
-                {
-                    Id = userIdToDelete,
-                    Username = "User To Delete"
-                };
+            // Arrange 
 
-                //
-                // setup mocks
+            var memberRepo = new Mock<IMemberRepository>();
+            var projectRepo = new Mock<IProjectRepository>();
+            var userRepo = new Mock<IUserRepository>();
+            var taskRepo = new Mock<ITaskRepository>();
+            var unitOfWork = new Mock<IUnitOfWork>();
 
-                projectRepo.Setup(repo => repo.GetByIdAsync(projectId)).ReturnsAsync(project);
-                userRepo.Setup(repo => repo.GetUserByIdAsync(userIdToDelete)).ReturnsAsync(user);
-                memberRepo.Setup(repo => repo.GetMemberByUserIdAndProjectIdAsync(userIdToDelete, projectId)).ReturnsAsync(memberToDelete);
+            Guid currentUserId = Guid.NewGuid();
+            Guid userIdToDelete = Guid.NewGuid();
+            Guid projectId = Guid.NewGuid();
 
-                var memberService = new MemberService(
-                    memberRepo.Object,
-                    projectRepo.Object,
-                    userRepo.Object,
-                    unitOfWork.Object,
-                    taskRepo.Object
-                );
+            Project project = new Project { Id = projectId, OwnerId = Guid.NewGuid() };
 
-                // Act
-                Exception exception = await Assert.ThrowsAsync<Exception>(() =>
-                                        memberService.DeleteMemberAsync(currentUserId, userIdToDelete, projectId));
+            ProjectMember memberToDelete = new ProjectMember
+            {
+                Id = Guid.NewGuid(),
+                UserId = userIdToDelete,
+                ProjectId = projectId,
+                Role = ProjectRole.Member
+            };
+            User user = new()
+            {
+                Id = userIdToDelete,
+                Username = "User To Delete"
+            };
 
-                // Assert
-                Assert.Equal("Only the project owner can delete members.", exception.Message);
+            //
+            // setup mocks
+
+            projectRepo.Setup(repo => repo.GetByIdAsync(projectId)).ReturnsAsync(project);
+            userRepo.Setup(repo => repo.GetUserByIdAsync(userIdToDelete)).ReturnsAsync(user);
+            memberRepo.Setup(repo => repo.GetMemberByUserIdAndProjectIdAsync(userIdToDelete, projectId)).ReturnsAsync(memberToDelete);
+
+            var memberService = new MemberService(
+                memberRepo.Object,
+                projectRepo.Object,
+                userRepo.Object,
+                unitOfWork.Object,
+                taskRepo.Object
+            );
+
+            // Act
+            Exception exception = await Assert.ThrowsAsync<Exception>(() =>
+                                    memberService.DeleteMemberAsync(currentUserId, userIdToDelete, projectId));
+
+            // Assert
+            Assert.Equal("Only the project owner can delete members.", exception.Message);
         }
     
     
@@ -243,10 +243,10 @@ namespace Tests.Services
             Guid userId = Guid.NewGuid();
             Guid projectId = Guid.NewGuid();
 
-            User user = new ()
+            User user = new()
             {
                 Id = userId,
-                Username = "New User"  
+                Username = "New User"
             };
 
             Project project = new()
@@ -261,7 +261,7 @@ namespace Tests.Services
             //
             //
             // Setup mocks
-            userRepo.Setup( repo => repo.GetUserByIdAsync(userId)).ReturnsAsync(user);
+            userRepo.Setup(repo => repo.GetUserByIdAsync(userId)).ReturnsAsync(user);
             projectRepo.Setup(repo => repo.GetByIdAsync(projectId)).ReturnsAsync(project);
 
             var memberService = new MemberService(
@@ -272,7 +272,7 @@ namespace Tests.Services
                 taskRepo.Object
             );
 
-            
+
             //
             // Act
             await memberService.CreateMemberAsync(currentUserId, projectId, userId, ProjectRole.Member);
@@ -285,5 +285,65 @@ namespace Tests.Services
 
         }
     
+
+
+        [Fact]
+        public async Task CreateMemberAsync_AdminCannotAssignAdminRole()
+        {
+            //
+            // Arrange
+            var memberRepo = new Mock<IMemberRepository>();
+            var userRepo = new Mock<IUserRepository>();
+            var taskRepo = new Mock<ITaskRepository>();
+            var projectRepo = new Mock<IProjectRepository>();
+            var unitOfWork = new Mock<IUnitOfWork>();
+
+            Guid userId = Guid.NewGuid();
+            Guid currentUserId = Guid.NewGuid();
+            Guid projectId = Guid.NewGuid();
+
+            User user = new()
+            {
+                Id = userId,
+                Username = "User 1"
+            };
+
+            Project project = new()
+            {
+                Id = projectId,
+                Name = "project 1",
+                Description = null,
+                OwnerId = Guid.NewGuid()
+            };
+
+            ProjectMember currentMember = new()
+            {
+                Id = Guid.NewGuid(),
+                UserId = currentUserId,
+                Role = ProjectRole.Admin
+            };
+
+
+            //
+            // setup mocks
+            memberRepo.Setup(repo => repo.GetMemberByUserIdAndProjectIdAsync(currentUserId, projectId))
+                                                .ReturnsAsync(currentMember);
+
+            projectRepo.Setup(repo => repo.GetByIdAsync(projectId))
+                                                .ReturnsAsync(project);
+            
+            userRepo.Setup(repo => repo.GetUserByIdAsync(userId))
+                                                .ReturnsAsync(user);
+
+            MemberService memberService = new(memberRepo.Object, projectRepo.Object, userRepo.Object, unitOfWork.Object, taskRepo.Object);
+
+
+            // Act
+            Exception exception = await Assert.ThrowsAsync<Exception>(() => memberService.CreateMemberAsync(currentUserId, projectId, userId, ProjectRole.Admin));
+
+            // Assert
+            Assert.Equal("Only the project owner can assign admin role.", exception.Message);
+
+        }
     }
 }
