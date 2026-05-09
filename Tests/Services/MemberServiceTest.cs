@@ -8,6 +8,7 @@ using Projects_Management_Studio.App.Interfaces.Repositories;
 using Projects_Management_Studio.App.Services;
 using Projects_Management_Studio.Domain.Entities;
 using Projects_Management_Studio.Domain.Enums;
+using Xunit.Sdk;
 
 namespace Tests.Services
 {
@@ -165,7 +166,7 @@ namespace Tests.Services
             memberRepo.Verify(x => x.Delete(It.IsAny<ProjectMember>()), Times.Never);
         }
 
-        
+
         //
         //
 
@@ -221,8 +222,8 @@ namespace Tests.Services
             // Assert
             Assert.Equal("Only the project owner can delete members.", exception.Message);
         }
-    
-    
+
+
 
         //
         //
@@ -284,7 +285,7 @@ namespace Tests.Services
             unitOfWork.Verify(u => u.SaveChangesAsync(), Times.Once);
 
         }
-    
+
 
 
         [Fact]
@@ -331,7 +332,7 @@ namespace Tests.Services
 
             projectRepo.Setup(repo => repo.GetByIdAsync(projectId))
                                                 .ReturnsAsync(project);
-            
+
             userRepo.Setup(repo => repo.GetUserByIdAsync(userId))
                                                 .ReturnsAsync(user);
 
@@ -345,5 +346,56 @@ namespace Tests.Services
             Assert.Equal("Only the project owner can assign admin role.", exception.Message);
 
         }
+
+
+        [Fact]
+        public async Task CreateMemberAsync_CannotAddDuplicateMember()
+        {
+            //
+            // Arrange 
+            var memberRepo = new Mock<IMemberRepository>();
+            var userRepo = new Mock<IUserRepository>();
+            var taskRepo = new Mock<ITaskRepository>();
+            var projectRepo = new Mock<IProjectRepository>();
+            var unitOfWork = new Mock<IUnitOfWork>();
+
+            Guid userId = Guid.NewGuid();
+            Guid currentUserId = Guid.NewGuid();
+            Guid projectId = Guid.NewGuid();
+
+            User user = new()
+            {
+                Id = userId,
+                Username = "user 1"
+            };
+
+            Project project = new()
+            {
+                Id = projectId,
+                Name = "project 1",
+                OwnerId = currentUserId
+            };
+
+
+            //
+            // Setup mocks
+
+            userRepo.Setup(repo => repo.GetUserByIdAsync(userId)).ReturnsAsync(user);
+            projectRepo.Setup(repo => repo.GetByIdAsync(projectId)).ReturnsAsync(project);
+            memberRepo.Setup(repo => repo.IsExistAsync(userId, projectId)).ReturnsAsync(true);
+
+            MemberService memberService = new(memberRepo.Object, projectRepo.Object, userRepo.Object, unitOfWork.Object, taskRepo.Object);
+
+            //
+            // Act
+            var exception = await Assert.ThrowsAsync<Exception>(() => memberService.CreateMemberAsync(currentUserId, projectId, userId, ProjectRole.Admin));
+
+
+            //
+            // Assert
+            Assert.Equal("User is already a member of the project.", exception.Message);
+        }
+
+
     }
 }
