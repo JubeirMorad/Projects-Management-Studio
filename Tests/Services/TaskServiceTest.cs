@@ -45,6 +45,13 @@ namespace Tests.Services
                 OwnerId = currentUserId
             };
 
+            ProjectMember member = new()
+            {
+                Id = Guid.NewGuid(),
+                UserId = userId,
+                Role = ProjectRole.Admin,
+                ProjectId = projectId
+            };
             //
             // setup mocks
 
@@ -52,7 +59,7 @@ namespace Tests.Services
 
             projectRepo.Setup(repo => repo.GetByIdAsync(task.ProjectId)).ReturnsAsync(project);
 
-            memberRepo.Setup(repo => repo.IsExistAsync(It.IsAny<Guid>(), It.IsAny<Guid>())).ReturnsAsync(true);
+            memberRepo.Setup(repo => repo.GetMemberByUserIdAndProjectIdAsync(It.IsAny<Guid>(), It.IsAny<Guid>())).ReturnsAsync(member);
 
             var taskService = new TaskService(
                 taskRepo.Object,
@@ -75,7 +82,7 @@ namespace Tests.Services
 
             Assert.Equal(userId, task.AssignedToUserId);
         }
-    
+
 
         [Fact]
         public async Task AssignTaskAsync_AdminCanAssignTask()
@@ -119,16 +126,24 @@ namespace Tests.Services
                 Role = ProjectRole.Admin
             };
 
+            ProjectMember member = new()
+            {
+                Id = Guid.NewGuid(),
+                ProjectId = projectId,
+                UserId = currentUserId,
+                Role = ProjectRole.Member
+            };
+
             //
             //
             // setup mocks
             memberRepo.Setup(repo => repo.GetMemberByUserIdAndProjectIdAsync(currentUserId, projectId)).ReturnsAsync(adminMember);
-            
+
             taskRepo.Setup(repo => repo.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(task);
 
             projectRepo.Setup(repo => repo.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(project);
 
-            memberRepo.Setup(repo => repo.IsExistAsync(It.IsAny<Guid>(), It.IsAny<Guid>())).ReturnsAsync(true);
+            memberRepo.Setup(repo => repo.GetMemberByUserIdAndProjectIdAsync(userId, It.IsAny<Guid>())).ReturnsAsync(member);
 
             var memberService = new TaskService(
                 taskRepo.Object,
@@ -150,7 +165,7 @@ namespace Tests.Services
 
             Assert.Equal(userId, task.AssignedToUserId);
         }
-    
+
 
         [Fact]
         public async Task AssignTaskAsync_NonAdminNonOwnerCannotAssignTask()
@@ -255,7 +270,7 @@ namespace Tests.Services
 
             projectRepo.Setup(repo => repo.GetByIdAsync(projectId)).ReturnsAsync(project);
 
-            
+
 
             var memberService = new TaskService(
                 taskRepo.Object,
@@ -273,6 +288,6 @@ namespace Tests.Services
             Assert.Equal("user is not a member of the project.", exception.Message);
 
         }
-    
+
     }
 }

@@ -92,7 +92,7 @@ namespace Projects_Management_Studio.App.Services
 
 
         //
-        public async Task AssignTaskAsync(Guid userId, Guid taskId, Guid? assignedToUserId)
+        public async Task AssignTaskAsync(Guid currentUserId, Guid taskId, Guid? assignedToUserId)
         {
             var task = await _taskRepo.GetByIdAsync(taskId)
                                 ?? throw new Exception("task not found.");
@@ -100,21 +100,29 @@ namespace Projects_Management_Studio.App.Services
             var project = await _projectRepo.GetByIdAsync(task.ProjectId)
                                 ?? throw new Exception("project not found.");
 
-            if (project.OwnerId != userId)
+            if (currentUserId == assignedToUserId)
+                throw new Exception("cannot assign task for you.");
+
+            if (project.OwnerId != currentUserId)
             {
-                ProjectMember? currentMember = await _memberRepository.GetMemberByUserIdAndProjectIdAsync(userId, task.ProjectId);
+                ProjectMember? currentMember = await _memberRepository.GetMemberByUserIdAndProjectIdAsync(currentUserId, task.ProjectId);
 
                 if (currentMember is null || currentMember.Role != ProjectRole.Admin)
                     throw new Exception("you have no permission to assign task here.");
+                
             }
 
             // check if the assigned user is a member of the project
             if (assignedToUserId is not null)
             {
-                bool isMember = await _memberRepository.IsExistAsync(project.Id, assignedToUserId.Value);
+                ProjectMember? member = await _memberRepository.GetMemberByUserIdAndProjectIdAsync(assignedToUserId.Value, task.ProjectId);
 
-                if (isMember == false)
+                if (member is null)
                     throw new Exception("user is not a member of the project.");
+
+                if (project.OwnerId != currentUserId && member.Role == ProjectRole.Admin)
+                    throw new Exception("only owner can assign task for admin.");
+
             }
 
 
