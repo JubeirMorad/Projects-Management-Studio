@@ -289,5 +289,82 @@ namespace Tests.Services
 
         }
 
+
+        [Fact]
+        public async Task AssignTaskAsync_AdminCannotAssignTaskForAdmin()
+        {
+             // Arrange 
+            var memberRepo = new Mock<IMemberRepository>();
+            var userRepo = new Mock<IUserRepository>();
+            var taskRepo = new Mock<ITaskRepository>();
+            var unitOfWork = new Mock<IUnitOfWork>();
+            var projectRepo = new Mock<IProjectRepository>();
+
+            Guid currentUserId = Guid.NewGuid();
+            Guid projectId = Guid.NewGuid();
+            Guid taskId = Guid.NewGuid();
+            Guid userId = Guid.NewGuid();
+
+            Project project = new()
+            {
+                Id = projectId,
+                Name = "Project 1",
+                Description = null,
+                OwnerId = Guid.NewGuid()
+            };
+
+            TaskItem task = new()
+            {
+                Id = taskId,
+                Title = "Task 1",
+                AssignedToUserId = Guid.NewGuid(),
+                ProjectId = projectId
+            };
+
+            ProjectMember member = new()
+            {
+                Id = Guid.NewGuid(),
+                UserId = userId,
+                Role = ProjectRole.Admin,
+                ProjectId = projectId
+            };
+
+            ProjectMember currentMember = new()
+            {
+                Id = Guid.NewGuid(),
+                UserId = currentUserId,
+                Role = ProjectRole.Admin,
+                ProjectId = projectId
+            };
+
+            //
+            //
+            // setup mocks
+            taskRepo.Setup(repo => repo.GetByIdAsync(taskId)).ReturnsAsync(task);
+
+            projectRepo.Setup(repo => repo.GetByIdAsync(projectId)).ReturnsAsync(project);
+
+            memberRepo.Setup(repo => repo.GetMemberByUserIdAndProjectIdAsync(userId, projectId)).ReturnsAsync(member);
+
+            memberRepo.Setup(repo => repo.GetMemberByUserIdAndProjectIdAsync(currentUserId, projectId)).ReturnsAsync(currentMember);
+
+            var taskService = new TaskService(
+                taskRepo.Object,
+                userRepo.Object,
+                projectRepo.Object,
+                memberRepo.Object,
+                unitOfWork.Object
+            );
+
+            //
+            // Act
+            Exception exception = await Assert.ThrowsAnyAsync<Exception>(() => taskService.AssignTaskAsync(currentUserId, taskId, userId));
+
+            // Assert
+            Assert.Equal("only owner can assign task for admin.", exception.Message);
+
+        }
+
+
     }
 }
