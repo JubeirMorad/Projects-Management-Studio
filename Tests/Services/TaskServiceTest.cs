@@ -215,5 +215,64 @@ namespace Tests.Services
 
             Assert.Equal("you have no permission to assign task here.", exception.Message);
         }
+
+
+        [Fact]
+        public async Task AssignTaskAsync_CannotAssingTaskToNonMember()
+        {
+            // Arrange 
+            var memberRepo = new Mock<IMemberRepository>();
+            var userRepo = new Mock<IUserRepository>();
+            var taskRepo = new Mock<ITaskRepository>();
+            var unitOfWork = new Mock<IUnitOfWork>();
+            var projectRepo = new Mock<IProjectRepository>();
+
+            Guid currentUserId = Guid.NewGuid();
+            Guid projectId = Guid.NewGuid();
+            Guid taskId = Guid.NewGuid();
+            Guid userId = Guid.NewGuid();
+
+            Project project = new()
+            {
+                Id = projectId,
+                Name = "Project 1",
+                Description = null,
+                OwnerId = currentUserId
+            };
+
+            TaskItem task = new()
+            {
+                Id = taskId,
+                Title = "Task 1",
+                AssignedToUserId = Guid.NewGuid(),
+                ProjectId = projectId
+            };
+
+            //
+            //
+            // setup mocks
+            taskRepo.Setup(repo => repo.GetByIdAsync(taskId)).ReturnsAsync(task);
+
+            projectRepo.Setup(repo => repo.GetByIdAsync(projectId)).ReturnsAsync(project);
+
+            
+
+            var memberService = new TaskService(
+                taskRepo.Object,
+                userRepo.Object,
+                projectRepo.Object,
+                memberRepo.Object,
+                unitOfWork.Object
+            );
+
+            //
+            // Act
+            Exception exception = await Assert.ThrowsAnyAsync<Exception>(() => memberService.AssignTaskAsync(currentUserId, taskId, userId));
+
+            // Assert
+            Assert.Equal("user is not a member of the project.", exception.Message);
+
+        }
+    
     }
 }
