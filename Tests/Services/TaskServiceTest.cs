@@ -414,5 +414,50 @@ namespace Tests.Services
         }
 
 
+        [Fact]
+        public async Task UpdateTaskStatus_UserCannotUpdateTaskNotAssingToHim()
+        {
+            //
+            //
+            // Arrange
+            var memberRepo = new Mock<IMemberRepository>();
+            var userRepo = new Mock<IUserRepository>();
+            var taskRepo = new Mock<ITaskRepository>();
+            var unitOfWork = new Mock<IUnitOfWork>();
+            var projectRepo = new Mock<IProjectRepository>();
+
+            Guid currentUserId = Guid.NewGuid();
+            Guid taskId = Guid.NewGuid();
+
+            TaskItem task = new()
+            {
+                Id = taskId,
+                Title = "Task 1",
+                AssignedToUserId = Guid.NewGuid(),
+                ProjectId = Guid.NewGuid()
+            };
+
+            // setup mocks
+            taskRepo.Setup(repo => repo.GetByIdAsync(taskId)).ReturnsAsync(task);
+
+            TaskService taskService = new(
+                taskRepo.Object,
+                userRepo.Object,
+                projectRepo.Object,
+                memberRepo.Object,
+                unitOfWork.Object
+            );
+
+            //
+            // Act
+
+            Exception exception = await Assert.ThrowsAsync<Exception>(() => taskService.UpdateTaskStatusAsync(currentUserId, taskId, TaskItemStatus.Done));
+
+            // Assert
+            Assert.Equal("Unauthorized.", exception.Message);
+
+        }
+
+
     }
 }
