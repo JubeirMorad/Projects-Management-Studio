@@ -293,7 +293,7 @@ namespace Tests.Services
         [Fact]
         public async Task AssignTaskAsync_AdminCannotAssignTaskForAdmin()
         {
-             // Arrange 
+            // Arrange 
             var memberRepo = new Mock<IMemberRepository>();
             var userRepo = new Mock<IUserRepository>();
             var taskRepo = new Mock<ITaskRepository>();
@@ -363,6 +363,54 @@ namespace Tests.Services
             // Assert
             Assert.Equal("only owner can assign task for admin.", exception.Message);
 
+        }
+
+
+        //
+        /*** TEST UPDATE TASK STATUS ***/
+
+        [Fact]
+        public async Task UpdateTaskStatus_ItWorks()
+        {
+            //
+            // Arrange 
+
+            var memberRepo = new Mock<IMemberRepository>();
+            var userRepo = new Mock<IUserRepository>();
+            var taskRepo = new Mock<ITaskRepository>();
+            var unitOfWork = new Mock<IUnitOfWork>();
+            var projectRepo = new Mock<IProjectRepository>();
+
+            Guid currentUserId = Guid.NewGuid();
+            Guid taskId = Guid.NewGuid();
+
+            TaskItem task = new()
+            {
+                Id = taskId,
+                Title = "Task 1",
+                AssignedToUserId = currentUserId,
+                ProjectId = Guid.NewGuid()
+            };
+
+            // setup mocks
+            taskRepo.Setup(repo => repo.GetByIdAsync(taskId)).ReturnsAsync(task);
+
+            TaskService taskService = new(
+                taskRepo.Object,
+                userRepo.Object,
+                projectRepo.Object,
+                memberRepo.Object,
+                unitOfWork.Object
+            );
+
+            //
+            // Act
+            await taskService.UpdateTaskStatusAsync(currentUserId, taskId, TaskItemStatus.Done);
+
+            // Assert
+            taskRepo.Verify(repo => repo.GetByIdAsync(taskId), Times.Once);
+            unitOfWork.Verify(repo => repo.SaveChangesAsync(), Times.Once);
+            taskRepo.Verify(repo => repo.Update(task), Times.Once);
         }
 
 
