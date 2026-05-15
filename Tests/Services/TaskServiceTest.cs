@@ -459,5 +459,59 @@ namespace Tests.Services
         }
 
 
+        /*** TEST UPDATE TASK ***/
+        [Fact]
+        public async Task UpdateTaskAsync_OwnerCanUpdateTask()
+        {
+            //
+            //
+            // Arrange
+            var memberRepo = new Mock<IMemberRepository>();
+            var userRepo = new Mock<IUserRepository>();
+            var taskRepo = new Mock<ITaskRepository>();
+            var unitOfWork = new Mock<IUnitOfWork>();
+            var projectRepo = new Mock<IProjectRepository>();
+
+            Guid currentUserId = Guid.NewGuid();
+            Guid taskId = Guid.NewGuid();
+
+            TaskItem task = new()
+            {
+                Id = taskId,
+                Title = "Task 1",
+                Description = null,
+                AssignedToUserId = Guid.NewGuid(),
+                ProjectId = Guid.NewGuid()
+            };
+
+            Project project = new()
+            {
+                OwnerId = currentUserId
+            };
+
+            // setup mocks
+            taskRepo.Setup(repo => repo.GetByIdAsync(taskId)).ReturnsAsync(task);
+            projectRepo.Setup(r => r.GetByIdAsync(It.IsAny<Guid>())).ReturnsAsync(project);
+
+            TaskService taskService = new(
+                taskRepo.Object,
+                userRepo.Object,
+                projectRepo.Object,
+                memberRepo.Object,
+                unitOfWork.Object
+            );
+
+            //
+            // Act
+            await taskService.UpdateTaskAsync(currentUserId, taskId, "new Title", "new Description");
+
+            // Assert
+            taskRepo.Verify(repo => repo.Update(task), Times.Once);
+            unitOfWork.Verify(u => u.SaveChangesAsync(), Times.Once);
+
+            Assert.Equal("new Title", task.Title);
+            Assert.Equal("new Description", task.Description);
+
+        }
     }
 }
