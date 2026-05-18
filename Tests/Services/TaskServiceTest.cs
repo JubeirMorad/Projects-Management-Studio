@@ -627,5 +627,79 @@ namespace Tests.Services
 
             Assert.Equal(2, projectTasks.Count);
         }
+
+
+        [Fact]
+        public async Task GetTasksByProjectAsync_AdminCanAccessTasks()
+        {
+            //
+            //
+            // Arrange
+            var memberRepo = new Mock<IMemberRepository>();
+            var userRepo = new Mock<IUserRepository>();
+            var taskRepo = new Mock<ITaskRepository>();
+            var unitOfWork = new Mock<IUnitOfWork>();
+            var projectRepo = new Mock<IProjectRepository>();
+
+            Guid currentUserId = Guid.NewGuid();
+            Guid projectId = Guid.NewGuid();
+
+            List<GetTaskByProjectDto> tasks = new()
+            {
+                new
+                (
+                    Guid.NewGuid(),
+                    "Task 1",
+                    null,
+                    null,
+                    null,
+                    TaskItemStatus.Done.ToString()
+                ),
+                new
+                (
+                    Guid.NewGuid(),
+                    "Task 1",
+                    null,
+                    null,
+                    null,
+                    TaskItemStatus.Done.ToString()
+                )
+            };
+
+            Project project = new()
+            {
+                OwnerId = Guid.NewGuid()
+            };
+
+            ProjectMember currentMember = new()
+            {
+                UserId = currentUserId,
+                ProjectId = projectId,
+                Role = ProjectRole.Admin
+            };
+
+            // setup mocks
+
+            memberRepo.Setup(repo => repo.GetMemberByUserIdAndProjectIdAsync(currentUserId, projectId)).ReturnsAsync(currentMember);
+            projectRepo.Setup(repo => repo.GetByIdAsync(projectId)).ReturnsAsync(project);
+            taskRepo.Setup(repo => repo.GetTasksByProjectIdAsync(projectId)).ReturnsAsync(tasks);
+
+            TaskService taskService = new(
+                taskRepo.Object,
+                userRepo.Object,
+                projectRepo.Object,
+                memberRepo.Object,
+                unitOfWork.Object
+            );
+
+            // act
+            var projectTasks = await taskService.GetProjectTasksAsync(currentUserId, projectId);
+
+
+            // Assert
+            Assert.Equal(2, projectTasks.Count);
+            Assert.Equal(tasks[0], projectTasks[0]);
+        }
+
     }
 }
